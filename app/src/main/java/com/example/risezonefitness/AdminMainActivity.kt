@@ -1,10 +1,12 @@
 package com.example.risezonefitness
 
-
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class AdminMainActivity : AppCompatActivity() {
@@ -18,18 +20,17 @@ class AdminMainActivity : AppCompatActivity() {
 
         bottomNav = findViewById(R.id.bottomNav)
 
-
         allMembers = listMembers
 
+        openFragment(HomeFragment())
 
-
-
-
-
-       openFragment(HomeFragment())
-
+        val firstItem = bottomNav.menu.findItem(R.id.nav_home)
+        firstItem.icon?.setTint(ContextCompat.getColor(this, R.color.primary_color))
 
         bottomNav.setOnItemSelectedListener { menuItem ->
+            menuItem.icon?.setTint(ContextCompat.getColor(this, R.color.primary_color))
+
+
             when (menuItem.itemId) {
                 R.id.nav_home -> {
                     openFragment(HomeFragment())
@@ -48,7 +49,6 @@ class AdminMainActivity : AppCompatActivity() {
         }
     }
 
-
     private fun openFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, fragment)
@@ -57,6 +57,19 @@ class AdminMainActivity : AppCompatActivity() {
 
 
 
+    var backPressedOnce = false
 
+    override fun onBackPressed() {
+        if (backPressedOnce) {
+            super.onBackPressed()
+        } else {
+            backPressedOnce = true
+            Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show()
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                backPressedOnce = false
+            }, 2000)
+        }
+    }
 
 }

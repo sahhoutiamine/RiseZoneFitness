@@ -59,6 +59,11 @@
         <item name="android:textSize">12sp</item>
         <item name="cornerRadius">30dp</item>
     </style>
+    <style name="iconColor">
+        <item name="itemIconTint">@color/black</item>
+    </style>
+
+
 
 
 </resources>
