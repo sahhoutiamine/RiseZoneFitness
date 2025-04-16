@@ -22,9 +22,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        (activity as? AdminMainActivity)?.updateToolbarTitle("Settings")
+
         val themeCard = view.findViewById<CardView>(R.id.card_theme)
         val languageCard = view.findViewById<CardView>(R.id.card_language)
         val logoutCard = view.findViewById<CardView>(R.id.card_logout)
+
 
         themeCard.setOnClickListener {
             showThemeDialog()

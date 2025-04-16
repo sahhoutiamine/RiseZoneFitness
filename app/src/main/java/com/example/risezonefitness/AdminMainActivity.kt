@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -21,6 +22,10 @@ class AdminMainActivity : AppCompatActivity() {
         bottomNav = findViewById(R.id.bottomNav)
 
         allMembers = listMembers
+
+        val toolbar = findViewById<Toolbar>(R.id.topAppBar)
+        setSupportActionBar(toolbar)
+
 
         openFragment(HomeFragment())
 
@@ -70,6 +75,10 @@ class AdminMainActivity : AppCompatActivity() {
                 backPressedOnce = false
             }, 2000)
         }
+    }
+    fun updateToolbarTitle(title: String) {
+        val toolbar = findViewById<Toolbar>(R.id.topAppBar)
+        toolbar.title = title
     }
 
 }

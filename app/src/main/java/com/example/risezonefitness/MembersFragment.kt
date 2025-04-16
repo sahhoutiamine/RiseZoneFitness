@@ -14,10 +14,12 @@ class MembersFragment(private val members: List<Member>) : Fragment(R.layout.fra
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MemberAdapter
-    private var isBottomNavVisible = true  // متغير لتتبع حالة ظهور BottomNavigationView
+    private var isBottomNavVisible = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as? AdminMainActivity)?.updateToolbarTitle("Members")
+
 
         val buttonAll = view.findViewById<Button>(R.id.btnAll)
         val buttonPaid = view.findViewById<Button>(R.id.btnPaid)
