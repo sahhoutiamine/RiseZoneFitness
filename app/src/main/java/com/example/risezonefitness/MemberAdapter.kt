@@ -1,5 +1,6 @@
 package com.example.risezonefitness
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,7 @@ class MemberAdapter(private val members: List<Member>) : RecyclerView.Adapter<Me
         return MemberViewHolder(view)
     }
 
+
     override fun onBindViewHolder(holder: MemberViewHolder, position: Int) {
         val member = members[position]
         holder.nameText.text = member.name
@@ -31,8 +33,8 @@ class MemberAdapter(private val members: List<Member>) : RecyclerView.Adapter<Me
 
 
         if (member.isInGym) {
-            val attendanceColor = ContextCompat.getColor(holder.itemView.context, R.color.inGym_color)
-            holder.attendanceLine.setBackgroundColor(attendanceColor)
+            val attendanceColor = ContextCompat.getDrawable(holder.itemView.context, R.drawable.in_gym_color)
+            holder.attendanceLine.setBackgroundDrawable(attendanceColor)
         }
 
 

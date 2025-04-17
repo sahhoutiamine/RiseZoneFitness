@@ -2,12 +2,13 @@ package com.example.risezonefitness
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
+import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.tabs.TabLayout
 
 class MembersFragment(private val members: List<Member>) : Fragment(R.layout.fragment_members) {
 
@@ -21,9 +22,7 @@ class MembersFragment(private val members: List<Member>) : Fragment(R.layout.fra
         (activity as? AdminMainActivity)?.updateToolbarTitle("Members")
 
 
-        val buttonAll = view.findViewById<Button>(R.id.btnAll)
-        val buttonPaid = view.findViewById<Button>(R.id.btnPaid)
-        val buttonUnpaid = view.findViewById<Button>(R.id.btnUnpaid)
+
 
         bottomNav = requireActivity().findViewById(R.id.bottomNav)
         recyclerView = view.findViewById(R.id.recyclerViewMembers)
@@ -31,60 +30,42 @@ class MembersFragment(private val members: List<Member>) : Fragment(R.layout.fra
 
         adapter = MemberAdapter(members)
         recyclerView.adapter = adapter
-        val allButtons = listOf(buttonAll, buttonPaid, buttonUnpaid)
 
-        fun selectButton(selectedButton: Button) {
-            allButtons.forEach { button ->
-                if (button == selectedButton) {
-                    button.animate()
-                        .alpha(1f)
-                        .scaleX(1.05f)
-                        .scaleY(1.05f)
-                        .setDuration(150)
-                        .withEndAction {
-                            button.setBackgroundResource(R.drawable.filter_button_selected)
-                            button.animate()
-                                .scaleX(1f)
-                                .scaleY(1f)
-                                .setDuration(100)
-                                .start()
-                        }
-                        .start()
-                } else {
-                    button.setBackgroundResource(R.drawable.filter_button_unselected)
-                    button.animate()
-                        .alpha(1f)
-                        .scaleX(1f)
-                        .scaleY(1f)
-                        .setDuration(100)
-                        .start()
+
+
+        val tabs = listOf("All", "Subscriber", "Not Subscriber")
+        val tabLayout = view.findViewById<TabLayout>(R.id.filterTabs)
+
+        tabs.forEach {
+            tabLayout.addTab(tabLayout.newTab().setText(it))
+        }
+
+
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                val selected = tab.text.toString()
+
+                when (selected) {
+                    "All" -> updateAdapter(listMembers)
+                    "Subscriber" -> updateAdapter(listMembers.filter { it.isPaid })
+                    "Not Subscriber" -> updateAdapter(listMembers.filter { !it.isPaid })
                 }
+
+                animateRecyclerViewWithDirection()
+
+
             }
-        }
 
-        selectButton(buttonAll)
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
 
-        buttonAll.setOnClickListener {
-            updateAdapter(listMembers)
-            selectButton(buttonAll)
-            animateRecyclerViewWithSlide()
-        }
 
-        buttonPaid.setOnClickListener {
-            val filtered = listMembers.filter { it.isPaid }
-            updateAdapter(filtered)
-            selectButton(buttonPaid)
-            animateRecyclerViewWithSlide()
-        }
 
-        buttonUnpaid.setOnClickListener {
-            val filtered = listMembers.filter { !it.isPaid }
-            updateAdapter(filtered)
-            selectButton(buttonUnpaid)
-            animateRecyclerViewWithSlide()
-        }
 
-        // إخفاء الـ BottomNavigationView عند التمرير
+
+
+
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -120,10 +101,14 @@ class MembersFragment(private val members: List<Member>) : Fragment(R.layout.fra
         recyclerView.adapter = adapter
     }
 
-    private fun animateRecyclerViewWithSlide() {
-        recyclerView.translationY = 100f
-        recyclerView.animate().translationY(0f)
-            .setDuration(500)
-            .start()
+    private fun animateRecyclerViewWithDirection() {
+        val context = recyclerView.context
+
+        val controller = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_translate)
+        recyclerView.layoutAnimation = controller
+        recyclerView.scheduleLayoutAnimation()
+
     }
+
+
 }
