@@ -7,4 +7,5 @@
     <color name="selected_gray">#DDDDDD</color>
     <color name="inGym_color">#49A9FF</color>
     <color name="gray">#B0B0CE</color>
+    <color name="red">#E53935</color>
 </resources>

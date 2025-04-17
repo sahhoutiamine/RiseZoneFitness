@@ -1,12 +1,9 @@
 package com.example.risezonefitness
 
+import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -20,22 +17,24 @@ class AdminMainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_admin_main)
 
         bottomNav = findViewById(R.id.bottomNav)
-
         allMembers = listMembers
 
         val toolbar = findViewById<Toolbar>(R.id.topAppBar)
         setSupportActionBar(toolbar)
 
+        val sharedPref = getSharedPreferences("user_settings", Context.MODE_PRIVATE)
+        val lastFragment = sharedPref.getString("last_fragment", null)
 
-        openFragment(HomeFragment())
-
-        val firstItem = bottomNav.menu.findItem(R.id.nav_home)
-        firstItem.icon?.setTint(ContextCompat.getColor(this, R.color.primary_color))
+        if (lastFragment == "settings") {
+            openFragment(SettingsFragment())
+            bottomNav.selectedItemId = R.id.nav_settings
+            sharedPref.edit().remove("last_fragment").apply()
+        } else {
+            openFragment(HomeFragment())
+            bottomNav.selectedItemId = R.id.nav_home
+        }
 
         bottomNav.setOnItemSelectedListener { menuItem ->
-            menuItem.icon?.setTint(ContextCompat.getColor(this, R.color.primary_color))
-
-
             when (menuItem.itemId) {
                 R.id.nav_home -> {
                     openFragment(HomeFragment())
@@ -60,12 +59,8 @@ class AdminMainActivity : AppCompatActivity() {
             .commit()
     }
 
-
-
-
     fun updateToolbarTitle(title: String) {
         val toolbar = findViewById<Toolbar>(R.id.topAppBar)
         toolbar.title = title
     }
-
 }

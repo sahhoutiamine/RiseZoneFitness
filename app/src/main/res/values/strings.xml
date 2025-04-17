@@ -26,4 +26,6 @@
     <string name="language">Language</string>
     <string name="account">Account</string>
     <string name="log_out">Log Out</string>
+    <string name="log_out_confirm_text">Are you sure you want to log out ?</string>
+    <string name="log_out_cancel">Cancel</string>
 </resources>
