@@ -111,7 +111,7 @@ class MembersFragment(private val members: List<Member>) : Fragment(R.layout.fra
     private fun animateRecyclerSwap(newList: List<Member>, isLeft: Boolean) {
         val outAnim = AnimationUtils.loadAnimation(
             requireContext(),
-            if (isLeft) R.anim.slide_out_left else R.anim.slide_out_right
+            if (isLeft) R.anim.slide_out_right else R.anim.slide_out_left
         )
         recyclerView.startAnimation(outAnim)
 
@@ -123,7 +123,7 @@ class MembersFragment(private val members: List<Member>) : Fragment(R.layout.fra
 
                 val inAnim = AnimationUtils.loadLayoutAnimation(
                     requireContext(),
-                    if (isLeft) R.anim.layout_animation_from_left else R.anim.layout_animation_from_right
+                    if (isLeft) R.anim.layout_animation_from_right else R.anim.layout_animation_from_left
                 )
                 recyclerView.layoutAnimation = inAnim
                 recyclerView.scheduleLayoutAnimation()
