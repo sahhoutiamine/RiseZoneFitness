@@ -137,7 +137,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             val sharedPref = requireContext().getSharedPreferences("user_session", Context.MODE_PRIVATE)
             sharedPref.edit().clear().apply()
 
-            val intent = Intent(requireContext(), LoginActivity::class.java)
+            val intent = Intent(requireContext(), WelcomeActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
 
