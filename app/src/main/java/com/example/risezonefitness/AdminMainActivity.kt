@@ -62,20 +62,7 @@ class AdminMainActivity : AppCompatActivity() {
 
 
 
-    var backPressedOnce = false
 
-    override fun onBackPressed() {
-        if (backPressedOnce) {
-            super.onBackPressed()
-        } else {
-            backPressedOnce = true
-            Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show()
-
-            Handler(Looper.getMainLooper()).postDelayed({
-                backPressedOnce = false
-            }, 2000)
-        }
-    }
     fun updateToolbarTitle(title: String) {
         val toolbar = findViewById<Toolbar>(R.id.topAppBar)
         toolbar.title = title

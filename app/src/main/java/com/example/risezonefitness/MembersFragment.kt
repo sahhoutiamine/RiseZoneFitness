@@ -2,6 +2,7 @@ package com.example.risezonefitness
 
 import android.os.Bundle
 import android.view.View
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
@@ -41,24 +42,29 @@ class MembersFragment(private val members: List<Member>) : Fragment(R.layout.fra
         }
 
 
+        var lastSelectedTabIndex = 0
+
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 val selected = tab.text.toString()
+                val currentIndex = tab.position
+                val isLeft = currentIndex > lastSelectedTabIndex
 
-                when (selected) {
-                    "All" -> updateAdapter(listMembers)
-                    "Subscriber" -> updateAdapter(listMembers.filter { it.isPaid })
-                    "Not Subscriber" -> updateAdapter(listMembers.filter { !it.isPaid })
+                val filteredList = when (selected) {
+                    "All" -> listMembers
+                    "Subscriber" -> listMembers.filter { it.isPaid }
+                    "Not Subscriber" -> listMembers.filter { !it.isPaid }
+                    else -> listMembers
                 }
 
-                animateRecyclerViewWithDirection()
-
-
+                animateRecyclerSwap(filteredList, isLeft)
+                lastSelectedTabIndex = currentIndex
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
+
 
 
 
@@ -101,14 +107,33 @@ class MembersFragment(private val members: List<Member>) : Fragment(R.layout.fra
         recyclerView.adapter = adapter
     }
 
-    private fun animateRecyclerViewWithDirection() {
-        val context = recyclerView.context
+//
+    private fun animateRecyclerSwap(newList: List<Member>, isLeft: Boolean) {
+        val outAnim = AnimationUtils.loadAnimation(
+            requireContext(),
+            if (isLeft) R.anim.slide_out_left else R.anim.slide_out_right
+        )
+        recyclerView.startAnimation(outAnim)
 
-        val controller = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_translate)
-        recyclerView.layoutAnimation = controller
-        recyclerView.scheduleLayoutAnimation()
+        outAnim.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation?) {}
 
+            override fun onAnimationEnd(animation: Animation?) {
+                updateAdapter(newList)
+
+                val inAnim = AnimationUtils.loadLayoutAnimation(
+                    requireContext(),
+                    if (isLeft) R.anim.layout_animation_from_left else R.anim.layout_animation_from_right
+                )
+                recyclerView.layoutAnimation = inAnim
+                recyclerView.scheduleLayoutAnimation()
+            }
+
+            override fun onAnimationRepeat(animation: Animation?) {}
+        })
     }
+
+
 
 
 }
