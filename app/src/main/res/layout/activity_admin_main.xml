@@ -9,9 +9,12 @@
         android:id="@+id/topAppBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:titleTextColor="@android:color/white" />
+        android:background="@color/primary_color"
+        android:elevation="6dp"
+        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+        app:title="RiseZone"
+        app:titleCentered="true"
+        app:titleTextAppearance="@style/ToolbarTitleStyle"/>
 
 
 
@@ -26,10 +29,11 @@
         android:layout_height="55dp"
         android:layout_gravity="bottom"
         android:background="@drawable/bottom_nav_background"
-        android:layout_margin="0dp"
-        app:itemIconSize="32dp"
-        app:itemIconTint="@null"
-        style="@style/iconColor"
+        android:stateListAnimator="@null"
+        app:itemIconSize="30dp"
+        app:itemRippleColor="@android:color/transparent"
+        app:itemBackground="@null"
+        app:itemIconTint="@color/primary_color"
         app:menu="@menu/bottom_nav_menu" />
 
 
