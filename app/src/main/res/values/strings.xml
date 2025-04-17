@@ -29,4 +29,16 @@
     <string name="log_out_confirm_text">Are you sure you want to log out ?</string>
     <string name="log_out_cancel">Cancel</string>
     <string name="welcome_hero">WELCOME HERO</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="confirm">Confirm</string>
+    <string name="member_password">Member Password</string>
+    <string name="member_username">Member Username</string>
+    <string name="email">Email</string>
+    <string name="phone">Number</string>
+    <string name="gender">Gender</string>
+    <string name="age">Age</string>
+    <string name="name">Name</string>
+    <string name="cin">CIN</string>
+    <string name="member_added_successfully">Member added successfully!</string>
+    <string name="done">Done</string>
 </resources>

@@ -28,7 +28,7 @@ class MemberAdapter(private val members: List<Member>) : RecyclerView.Adapter<Me
 
     override fun onBindViewHolder(holder: MemberViewHolder, position: Int) {
         val member = members[position]
-        holder.nameText.text = member.name
+        holder.nameText.text = member.fullName
         holder.subscriptionStatusText.text = if (member.isPaid) "Subscribed" else "Not Subscribed"
 
 

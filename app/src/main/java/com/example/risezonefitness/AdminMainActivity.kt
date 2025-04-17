@@ -5,7 +5,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.work.PeriodicWorkRequestBuilder
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import java.util.concurrent.TimeUnit
 
 class AdminMainActivity : AppCompatActivity() {
 
@@ -44,6 +48,10 @@ class AdminMainActivity : AppCompatActivity() {
                     openFragment(MembersFragment(allMembers))
                     true
                 }
+                R.id.nav_add -> {
+                    openFragment(AddFragment())
+                    true
+                }
                 R.id.nav_settings -> {
                     openFragment(SettingsFragment())
                     true
@@ -51,6 +59,16 @@ class AdminMainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
+        schedulePaymentWorker()
+    }
+
+    private fun schedulePaymentWorker() {
+        val workRequest = PeriodicWorkRequestBuilder<PaymentCheckWorker>(
+            1, TimeUnit.DAYS
+        ).build()
+
+        WorkManager.getInstance(this).enqueue(workRequest)
     }
 
     private fun openFragment(fragment: Fragment) {
@@ -64,3 +82,4 @@ class AdminMainActivity : AppCompatActivity() {
         toolbar.title = title
     }
 }
+
