@@ -8,4 +8,8 @@
     <color name="inGym_color">#49A9FF</color>
     <color name="gray">#B0B0CE</color>
     <color name="red">#E53935</color>
+    <color name="backgroundStart">#4e8bff</color>
+    <color name="backgroundEnd">#1a73e8</color>
+
+
 </resources>
