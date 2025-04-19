@@ -115,21 +115,23 @@ class ProfileActivity : AppCompatActivity() {
                     Toast.makeText(this, "The member is subscribed.", Toast.LENGTH_SHORT).show()
                 } else {
                     val subject = "Your RiseZone Subscription Has Expired"
-                    val body = "Hello ${member.fullName},\n\nWe hope you're doing well.\n\nThis is a reminder that your subscription to RiseZone has expired.\nTo continue benefiting from our services, please renew your subscription at your earliest convenience.\n\nThank you for being part of RiseZone!"
+                    val body = "Hello ${member.fullName},\n\nWe hope you're doing well.\n\nThis is a reminder that your subscription to RiseZone has expired.\n\nTo continue benefiting from our services, please renew your subscription at your earliest convenience.\n\nThank you for being part of RiseZone!"
 
-                    val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
-                        data = "mailto:${member.email}".toUri()
+                    val emailIntent = Intent(Intent.ACTION_SEND).apply {
+                        type = "message/rfc822"
+                        putExtra(Intent.EXTRA_EMAIL, arrayOf(member.email))
                         putExtra(Intent.EXTRA_SUBJECT, subject)
                         putExtra(Intent.EXTRA_TEXT, body)
                     }
 
                     if (emailIntent.resolveActivity(packageManager) != null) {
-                        startActivity(emailIntent)
+                        startActivity(Intent.createChooser(emailIntent, "Send email using"))
                     } else {
                         Toast.makeText(this, "No email app found.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
+
 
             btnSubscribed.setOnClickListener {
                 val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_confirm_change, null)
