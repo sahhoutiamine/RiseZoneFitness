@@ -41,4 +41,13 @@
     <string name="cin">CIN</string>
     <string name="member_added_successfully">Member added successfully!</string>
     <string name="done">Done</string>
+    <string name="delete">Delete</string>
+    <string name="back_icon">Back Icon</string>
+    <string name="edit_icon">Edit Icon</string>
+    <string name="risezonegym">RiseZoneGym</string>
+    <string name="status">Status</string>
+    <string name="registration_date">Registration</string>
+    <string name="subscription_status">Subscription</string>
+    <string name="contact_infos">Contact Infos</string>
+    <string name="subscribed">Subscribed</string>
 </resources>

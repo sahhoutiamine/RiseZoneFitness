@@ -20,6 +20,7 @@
             android:background="@drawable/avatar_background"
             android:contentDescription="@string/profile"
             android:scaleType="centerCrop"
+            android:src="@drawable/ic_person"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.05"

@@ -7,7 +7,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.work.PeriodicWorkRequestBuilder
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
 
@@ -65,7 +64,7 @@ class AdminMainActivity : AppCompatActivity() {
 
     private fun schedulePaymentWorker() {
         val workRequest = PeriodicWorkRequestBuilder<PaymentCheckWorker>(
-            1, TimeUnit.DAYS
+            3, TimeUnit.DAYS
         ).build()
 
         WorkManager.getInstance(this).enqueue(workRequest)

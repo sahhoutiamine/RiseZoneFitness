@@ -29,7 +29,7 @@ class MembersFragment(private val members: List<Member>) : Fragment(R.layout.fra
         recyclerView = view.findViewById(R.id.recyclerViewMembers)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        adapter = MemberAdapter(members)
+        adapter = MemberAdapter(members, requireContext())
         recyclerView.adapter = adapter
 
 
@@ -103,7 +103,7 @@ class MembersFragment(private val members: List<Member>) : Fragment(R.layout.fra
     }
 
     private fun updateAdapter(members: List<Member>) {
-        adapter = MemberAdapter(members)
+        adapter = MemberAdapter(members, requireContext())
         recyclerView.adapter = adapter
     }
 

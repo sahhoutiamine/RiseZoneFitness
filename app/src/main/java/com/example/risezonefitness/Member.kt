@@ -1,5 +1,7 @@
 package com.example.risezonefitness
 
+import android.graphics.Bitmap
+
 data class Member(
     val fullName: String,
     val age: Int,
@@ -9,7 +11,7 @@ data class Member(
     val cin: String,
     val username: String,
     val password: String,
-    val imageResource: Int,
+    val imageResource: Bitmap? = null,
     val isPaid: Boolean = true,
     val isInGym: Boolean = true,
     val registrationDate: Long = System.currentTimeMillis()

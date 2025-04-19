@@ -1,13 +1,19 @@
 package com.example.risezonefitness
 
+import android.app.Activity
 import android.app.AlertDialog
+import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.google.android.material.textfield.TextInputEditText
 
@@ -22,6 +28,17 @@ class AddFragment : Fragment() {
     private lateinit var usernameInput: TextInputEditText
     private lateinit var passwordInput: TextInputEditText
     private lateinit var saveButton: Button
+    private lateinit var profileImage: ImageView
+
+    private var selectedImageUri: Uri? = null
+
+    private val imagePickerLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                selectedImageUri = result.data?.data
+                profileImage.setImageURI(selectedImageUri)
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,7 +46,6 @@ class AddFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_add, container, false)
         (activity as? AdminMainActivity)?.updateToolbarTitle("Add")
-
 
         fullNameInput = view.findViewById(R.id.fullNameInput)
         ageInput = view.findViewById(R.id.ageInput)
@@ -40,6 +56,12 @@ class AddFragment : Fragment() {
         usernameInput = view.findViewById(R.id.usernameInput)
         passwordInput = view.findViewById(R.id.passwordInput)
         saveButton = view.findViewById(R.id.saveButton)
+        profileImage = view.findViewById(R.id.profileImage)
+
+        profileImage.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            imagePickerLauncher.launch(intent)
+        }
 
         saveButton.setOnClickListener { saveMember() }
 
@@ -63,6 +85,8 @@ class AddFragment : Fragment() {
             return
         }
 
+        val drawable = profileImage.drawable
+        val memberImage = if (drawable is BitmapDrawable) drawable.bitmap else null
 
         val newMember = Member(
             fullName,
@@ -73,9 +97,8 @@ class AddFragment : Fragment() {
             cin,
             username,
             password,
-            R.drawable.ic_person
+            memberImage
         )
-
 
         listMembers.add(newMember)
 
@@ -88,25 +111,25 @@ class AddFragment : Fragment() {
         val okButton = dialogView.findViewById<Button>(R.id.okButton)
         okButton.setOnClickListener {
             dialog.dismiss()
-
-            val rootView = requireView()
-
-            rootView.findViewById<TextInputEditText>(R.id.fullNameInput).setText("")
-            rootView.findViewById<TextInputEditText>(R.id.ageInput).setText("")
-            rootView.findViewById<TextInputEditText>(R.id.genderInput).setText("")
-            rootView.findViewById<TextInputEditText>(R.id.phoneInput).setText("")
-            rootView.findViewById<TextInputEditText>(R.id.emailInput).setText("")
-            rootView.findViewById<TextInputEditText>(R.id.usernameInput).setText("")
-            rootView.findViewById<TextInputEditText>(R.id.passwordInput).setText("")
-            rootView.findViewById<TextInputEditText>(R.id.signUpCIN).setText("")
-
-            val profileImage = rootView.findViewById<ImageView>(R.id.profileImage)
-            profileImage.setImageResource(R.drawable.ic_person)
+            clearFields()
         }
 
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.show()
 
         requireActivity().supportFragmentManager.popBackStack()
+    }
+
+    private fun clearFields() {
+        fullNameInput.setText("")
+        ageInput.setText("")
+        genderInput.setText("")
+        phoneInput.setText("")
+        emailInput.setText("")
+        cinInput.setText("")
+        usernameInput.setText("")
+        passwordInput.setText("")
+        profileImage.setImageResource(R.drawable.ic_person)
+        selectedImageUri = null
     }
 }

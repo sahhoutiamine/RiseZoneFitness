@@ -1,8 +1,8 @@
 package com.example.risezonefitness
 
-import android.annotation.SuppressLint
-import android.graphics.Color
+import android.content.Intent
 import android.view.View
+import android.content.Context
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.widget.ImageView
@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
-class MemberAdapter(private val members: List<Member>) : RecyclerView.Adapter<MemberAdapter.MemberViewHolder>() {
+class MemberAdapter(private val members: List<Member>, private val context: Context) : RecyclerView.Adapter<MemberAdapter.MemberViewHolder>() {
 
     class MemberViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nameText: TextView = itemView.findViewById(R.id.tvMemberName)
@@ -25,20 +25,44 @@ class MemberAdapter(private val members: List<Member>) : RecyclerView.Adapter<Me
         return MemberViewHolder(view)
     }
 
-
     override fun onBindViewHolder(holder: MemberViewHolder, position: Int) {
         val member = members[position]
+
         holder.nameText.text = member.fullName
         holder.subscriptionStatusText.text = if (member.isPaid) "Subscribed" else "Not Subscribed"
 
-
         if (member.isInGym) {
             val attendanceColor = ContextCompat.getDrawable(holder.itemView.context, R.drawable.in_gym_color)
-            holder.attendanceLine.setBackgroundDrawable(attendanceColor)
+            holder.attendanceLine.background = attendanceColor
         }
 
+        if (member.imageResource != null) {
+            holder.avatar.setImageBitmap(member.imageResource)
+        } else {
+            holder.avatar.setImageResource(R.drawable.ic_person)
+        }
 
-        holder.avatar.setImageResource(member.imageResource)
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, ProfileActivity::class.java)
+
+            intent.putExtra("fullName", member.fullName)
+            intent.putExtra("age", member.age)
+            intent.putExtra("gender", member.gender)
+            intent.putExtra("phoneNumber", member.phoneNumber)
+            intent.putExtra("email", member.email)
+            intent.putExtra("cin", member.cin)
+            intent.putExtra("username", member.username)
+            intent.putExtra("password", member.password)
+            intent.putExtra("isPaid", member.isPaid)
+            intent.putExtra("isInGym", member.isInGym)
+            intent.putExtra("registrationDate", member.registrationDate)
+
+            member.imageResource?.let {
+                intent.putExtra("imageResource", it)
+            }
+
+            context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int = members.size
