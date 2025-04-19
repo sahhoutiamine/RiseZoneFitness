@@ -44,25 +44,10 @@ class MemberAdapter(private val members: List<Member>, private val context: Cont
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, ProfileActivity::class.java)
-
-            intent.putExtra("fullName", member.fullName)
-            intent.putExtra("age", member.age)
-            intent.putExtra("gender", member.gender)
-            intent.putExtra("phoneNumber", member.phoneNumber)
-            intent.putExtra("email", member.email)
-            intent.putExtra("cin", member.cin)
-            intent.putExtra("username", member.username)
-            intent.putExtra("password", member.password)
-            intent.putExtra("isPaid", member.isPaid)
-            intent.putExtra("isInGym", member.isInGym)
-            intent.putExtra("registrationDate", member.registrationDate)
-
-            member.imageResource?.let {
-                intent.putExtra("imageResource", it)
-            }
-
+            intent.putExtra("member_index", position)
             context.startActivity(intent)
         }
+
     }
 
     override fun getItemCount(): Int = members.size

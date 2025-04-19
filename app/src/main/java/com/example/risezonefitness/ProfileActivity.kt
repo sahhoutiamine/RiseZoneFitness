@@ -1,6 +1,5 @@
 package com.example.risezonefitness
 
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.ImageButton
@@ -45,41 +44,33 @@ class ProfileActivity : AppCompatActivity() {
         imgAvatar = findViewById(R.id.imgMemberAvatar)
         textSubscriptionStatus = findViewById(R.id.textSubscriptionStatus)
 
-        val fullName = intent.getStringExtra("fullName")
-        val age = intent.getIntExtra("age", 0)
-        val gender = intent.getStringExtra("gender")
-        val phoneNumber = intent.getStringExtra("phoneNumber")
-        val email = intent.getStringExtra("email")
-        val cin = intent.getStringExtra("cin")
-        val username = intent.getStringExtra("username")
-        val password = intent.getStringExtra("password")
-        val isPaid = intent.getBooleanExtra("isPaid", true)
-        val isInGym = intent.getBooleanExtra("isInGym", true)
-        val registrationDate = intent.getLongExtra("registrationDate", System.currentTimeMillis())
+        val index = intent.getIntExtra("member_index", -1)
+        if (index != -1) {
+            val member = listMembers[index]
 
-        textFullName.text = fullName
-        textAge.text = age.toString()
-        textGender.text = gender
-        textStatus.text = if (isInGym) "In Gym" else "Not In Gym"
-        textPhoneNumber.text = phoneNumber
-        textEmail.text = email
-        textCin.text = cin
-        textUsername.text = username
-        textPassword.text = password
-        textRegistrationDate.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(registrationDate))
+            textFullName.text = member.fullName
+            textAge.text = member.age.toString()
+            textGender.text = member.gender
+            textStatus.text = if (member.isInGym) "In Gym" else "Not In Gym"
+            textPhoneNumber.text = member.phoneNumber
+            textEmail.text = member.email
+            textCin.text = member.cin
+            textUsername.text = member.username
+            textPassword.text = member.password
+            textRegistrationDate.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(member.registrationDate))
+            textSubscriptionStatus.text = if (member.isPaid) "Subscribed" else "Not Subscribed"
+            textSubscriptionStatus.setTextColor(if (member.isPaid) Color.GREEN else Color.RED)
 
-        textSubscriptionStatus.text = if (isPaid) "Subscribed" else "Not Subscribed"
-        textSubscriptionStatus.setTextColor(if (isPaid) Color.GREEN else Color.RED)
-
-        val avatarBitmap = intent.getParcelableExtra<Bitmap>("imageResource")
-        if (avatarBitmap != null) {
-            imgAvatar.setImageBitmap(avatarBitmap)
-        } else {
-            imgAvatar.setImageResource(R.drawable.ic_person)
+            if (member.imageResource != null) {
+                imgAvatar.setImageBitmap(member.imageResource)
+            } else {
+                imgAvatar.setImageResource(R.drawable.ic_person)
+            }
         }
 
         btnBack.setOnClickListener {
             onBackPressed()
         }
     }
+
 }
