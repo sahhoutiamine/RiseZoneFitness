@@ -53,4 +53,7 @@
     <string name="confirm_sent">Are you sure you want to apply these updates ?</string>
     <string name="delete_sent">Are you sure you want to delete this member?</string>
     <string name="delete_title">Delete Member</string>
+    <string name="not_subscribed">Not Subscribed</string>
+    <string name="change">Change</string>
+    <string name="change_sent">Are you sure you want to change the subscription status?</string>
 </resources>

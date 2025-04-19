@@ -12,7 +12,7 @@ data class Member(
     val username: String,
     val password: String,
     val imageResource: Bitmap? = null,
-    val isPaid: Boolean = true,
+    var isPaid: Boolean = true,
     val isInGym: Boolean = true,
     val registrationDate: Long = System.currentTimeMillis()
 ) {
