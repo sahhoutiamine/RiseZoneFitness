@@ -50,4 +50,5 @@
     <string name="subscription_status">Subscription</string>
     <string name="contact_infos">Contact Infos</string>
     <string name="subscribed">Subscribed</string>
+    <string name="confirm_sent">Are you sure you want to apply these updates ?</string>
 </resources>

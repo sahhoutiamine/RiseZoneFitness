@@ -1,5 +1,6 @@
 package com.example.risezonefitness
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.ImageButton
@@ -22,9 +23,10 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var textUsername: TextView
     private lateinit var textPassword: TextView
     private lateinit var textRegistrationDate: TextView
-    private lateinit var btnBack: ImageButton
-    private lateinit var imgAvatar: ImageView
     private lateinit var textSubscriptionStatus: TextView
+    private lateinit var btnBack: ImageButton
+    private lateinit var btnEdit: ImageButton
+    private lateinit var imgAvatar: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +42,10 @@ class ProfileActivity : AppCompatActivity() {
         textUsername = findViewById(R.id.text_username)
         textPassword = findViewById(R.id.text_pw)
         textRegistrationDate = findViewById(R.id.text_reg_date)
-        btnBack = findViewById(R.id.btnBack)
-        imgAvatar = findViewById(R.id.imgMemberAvatar)
         textSubscriptionStatus = findViewById(R.id.textSubscriptionStatus)
+        btnBack = findViewById(R.id.btnBack)
+        btnEdit = findViewById(R.id.btnEdit)
+        imgAvatar = findViewById(R.id.imgMemberAvatar)
 
         val index = intent.getIntExtra("member_index", -1)
         if (index != -1) {
@@ -66,11 +69,16 @@ class ProfileActivity : AppCompatActivity() {
             } else {
                 imgAvatar.setImageResource(R.drawable.ic_person)
             }
+
+            btnEdit.setOnClickListener {
+                val intent = Intent(this, EditMemberActivity::class.java)
+                intent.putExtra("member_index", index)
+                startActivity(intent)
+            }
         }
 
         btnBack.setOnClickListener {
             onBackPressed()
         }
     }
-
 }
