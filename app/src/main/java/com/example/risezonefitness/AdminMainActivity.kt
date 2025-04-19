@@ -61,6 +61,17 @@ class AdminMainActivity : AppCompatActivity() {
 
         schedulePaymentWorker()
     }
+    override fun onResume() {
+        super.onResume()
+        val fragmentToLoad = intent.getStringExtra("fragmentToLoad")
+        if (fragmentToLoad == "members") {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, MembersFragment(listMembers))
+                .commit()
+            intent.removeExtra("fragmentToLoad")
+        }
+    }
+
 
     private fun schedulePaymentWorker() {
         val workRequest = PeriodicWorkRequestBuilder<PaymentCheckWorker>(

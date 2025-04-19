@@ -1,8 +1,10 @@
 package com.example.risezonefitness
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -27,6 +29,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var btnBack: ImageButton
     private lateinit var btnEdit: ImageButton
     private lateinit var imgAvatar: ImageView
+    private lateinit var btnDelete: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +49,7 @@ class ProfileActivity : AppCompatActivity() {
         btnBack = findViewById(R.id.btnBack)
         btnEdit = findViewById(R.id.btnEdit)
         imgAvatar = findViewById(R.id.imgMemberAvatar)
+        btnDelete = findViewById(R.id.btnDelete)
 
         val index = intent.getIntExtra("member_index", -1)
         if (index != -1) {
@@ -74,6 +78,30 @@ class ProfileActivity : AppCompatActivity() {
                 val intent = Intent(this, EditMemberActivity::class.java)
                 intent.putExtra("member_index", index)
                 startActivity(intent)
+            }
+
+            btnDelete.setOnClickListener {
+                val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_delete_confirmation, null)
+                val dialog = AlertDialog.Builder(this)
+                    .setView(dialogView)
+                    .setCancelable(false)
+                    .create()
+
+                dialogView.findViewById<TextView>(R.id.btnCancel).setOnClickListener {
+                    dialog.dismiss()
+                }
+
+                dialogView.findViewById<TextView>(R.id.btnDeleteConfirm).setOnClickListener {
+                    listMembers.removeAt(index)
+                    dialog.dismiss()
+                    val intent = Intent(this, AdminMainActivity::class.java)
+                    intent.putExtra("fragmentToLoad", "members")
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    startActivity(intent)
+                    finish()
+                }
+
+                dialog.show()
             }
         }
 

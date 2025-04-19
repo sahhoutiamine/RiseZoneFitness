@@ -13,7 +13,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.risezonefitness.databinding.ActivityEditMemberBinding
-import com.example.risezonefitness.databinding.ConfirmSaveDialogBinding
+import com.example.risezonefitness.databinding.DialogConfirmSaveBinding
 
 class EditMemberActivity : AppCompatActivity() {
 
@@ -72,7 +72,7 @@ class EditMemberActivity : AppCompatActivity() {
     }
 
     private fun showConfirmDialog(member: Member) {
-        val dialogBinding = ConfirmSaveDialogBinding.inflate(LayoutInflater.from(this))
+        val dialogBinding = DialogConfirmSaveBinding.inflate(LayoutInflater.from(this))
         val dialogBuilder = AlertDialog.Builder(this)
             .setView(dialogBinding.root)
             .setCancelable(false)

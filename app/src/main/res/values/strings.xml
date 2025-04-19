@@ -51,4 +51,6 @@
     <string name="contact_infos">Contact Infos</string>
     <string name="subscribed">Subscribed</string>
     <string name="confirm_sent">Are you sure you want to apply these updates ?</string>
+    <string name="delete_sent">Are you sure you want to delete this member?</string>
+    <string name="delete_title">Delete Member</string>
 </resources>
