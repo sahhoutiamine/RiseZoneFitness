@@ -29,7 +29,6 @@ class AddFragment : Fragment() {
     private lateinit var passwordInput: TextInputEditText
     private lateinit var saveButton: Button
     private lateinit var profileImage: ImageView
-
     private var selectedImageUri: Uri? = null
 
     private val imagePickerLauncher =

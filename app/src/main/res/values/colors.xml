@@ -8,6 +8,10 @@
     <color name="inGym_color">#49A9FF</color>
     <color name="gray">#B0B0CE</color>
     <color name="red">#E53935</color>
+    <color name="second_text_color">#777</color>
+    <color name="card_color">#DDEEFF</color>
+    <color name="card_color_dark">#22222C</color>
+    <color name="darkBlueBg">#1D272F</color>
 
 
 </resources>

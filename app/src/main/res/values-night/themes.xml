@@ -1,21 +1,12 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources >
     <style name="Base.Theme.RiseZoneFitness" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primary_color</item>
     </style>
     <style name="TextStyle">
-        <!-- Font family: Clean and elegant -->
-        <item name="android:fontFamily">monospace</item>
 
-        <!-- Font weight and style -->
         <item name="android:textStyle">bold</item>
 
-        <!-- Size: Accessible and responsive -->
-        <item name="android:textSize">16sp</item>
-
-        <!-- Line spacing for better readability -->
-        <item name="android:lineSpacingExtra">4dp</item>
-
+        <item name="android:textSize">14sp</item>
 
 
 
@@ -25,26 +16,41 @@
 
 
 
-        <!-- Text alignment -->
-        <item name="android:textAlignment">center</item> <!-- Align left-to-right based on locale -->
+        <item name="android:textAlignment">center</item>
+
+    </style>
+    <style name="secTextStyle">
+
+
+
+        <item name="android:textStyle">bold</item>
+
+
+        <item name="android:textSize">14sp</item>
+
+
+
+
+
+
+        <item name="android:textColor">@color/second_text_color</item>
+
+
+
+
+
+        <item name="android:textAlignment">center</item>
 
     </style>
     <style name="TitleTextStyle">
-        <!-- Font family: Medium weight sans-serif for clean and modern look -->
-        <item name="android:fontFamily">monospace</item>
 
-        <!-- Text size: Large for clear emphasis -->
-        <item name="android:textSize">22sp</item>
+        <item name="android:textSize">16sp</item>
 
 
 
-        <!-- Alignment: Left aligned for natural reading -->
         <item name="android:textAlignment">center</item>
 
-        <!-- Extra spacing between lines -->
-        <item name="android:lineSpacingExtra">2dp</item>
 
-        <!-- Style: Bold for strong visual hierarchy -->
         <item name="android:textStyle">bold</item>
 
 
@@ -70,6 +76,52 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="CardBackground" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/card_color_dark</item>
+    </style>
+
+
+
+    <style name="welcomeTextStyle">
+
+        <item name="android:textSize">25sp</item>
+
+
+        <item name="android:textAlignment">center</item>
+
+        <item name="android:textStyle">bold</item>
+
+
+        <item name="android:textColor">@color/white</item>
+
+
+    </style>
+
+    <style name="cardTitleTextStyle">
+
+        <item name="android:textSize">18sp</item>
+
+
+
+        <item name="android:textStyle">bold</item>
+
+
+        <item name="android:textColor">@color/white</item>
+
+
+    </style>
+
+
+    <style name="cardTextStyle">
+
+        <item name="android:textSize">15sp</item>
+
+
+        <item name="android:textColor">#B4B4B4</item>
+
+
     </style>
 
 
