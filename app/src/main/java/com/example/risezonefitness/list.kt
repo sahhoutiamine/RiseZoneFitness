@@ -20,4 +20,10 @@ package com.example.risezonefitness
 
 
 
+    val listAdmins = mutableListOf(
+        Admin("Admin", "admin", "admin")
+    )
+
+
+
 

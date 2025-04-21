@@ -30,6 +30,7 @@ class LoginActivity : AppCompatActivity() {
         val loginPassword = findViewById<TextInputEditText>(R.id.loginPassword)
         val loginBtn = findViewById<Button>(R.id.loginButton)
 
+
         loginUsername.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 usernameTextLayout.error = null
@@ -58,12 +59,15 @@ class LoginActivity : AppCompatActivity() {
             else {
                 val username = loginUsername.text.toString()
                 val password = loginPassword.text.toString()
-                if (username == "admin" && password == "admin") {
+                for (admin in listAdmins) {
+                if (username == admin.username && password == admin.password) {
                     val intent = Intent(this, AdminMainActivity::class.java)
                     startActivity(intent)
                 }
                 else {
                     pwTextLayout.error = "Invalid email or password"
+                }
+                    break
                 }
             }
 
