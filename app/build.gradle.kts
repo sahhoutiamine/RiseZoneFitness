@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -26,16 +27,20 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         viewBinding = true
     }
+
     packagingOptions {
         resources {
             excludes += "/META-INF/NOTICE.md"
@@ -45,16 +50,17 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.glide)
+    kapt(libs.compiler)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation (libs.lottie)
-    implementation (libs.androidx.work.runtime.ktx)
-    implementation (libs.android.activation)
-    implementation (libs.android.mail)
+    implementation(libs.lottie)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.android.activation)
+    implementation(libs.android.mail)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

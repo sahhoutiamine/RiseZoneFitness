@@ -9,6 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 
 class MemberAdapter(private val members: List<Member>, private val context: Context) : RecyclerView.Adapter<MemberAdapter.MemberViewHolder>() {
 
@@ -37,9 +39,15 @@ class MemberAdapter(private val members: List<Member>, private val context: Cont
         }
 
         if (member.imageResource != null) {
-            holder.avatar.setImageBitmap(member.imageResource)
+            Glide.with(holder.itemView.context)
+                .load(member.imageResource)
+                .apply(RequestOptions.circleCropTransform())
+                .into(holder.avatar)
         } else {
-            holder.avatar.setImageResource(R.drawable.ic_person)
+            Glide.with(holder.itemView.context)
+                .load(R.drawable.ic_person)
+                .apply(RequestOptions.circleCropTransform())
+                .into(holder.avatar)
         }
 
         holder.itemView.setOnClickListener {
@@ -47,7 +55,6 @@ class MemberAdapter(private val members: List<Member>, private val context: Cont
             intent.putExtra("member_index", position)
             context.startActivity(intent)
         }
-
     }
 
     override fun getItemCount(): Int = members.size
