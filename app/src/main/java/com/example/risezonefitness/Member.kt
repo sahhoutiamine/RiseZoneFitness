@@ -13,8 +13,10 @@ data class Member(
     val password: String,
     val imageResource: Bitmap? = null,
     var isPaid: Boolean = true,
-    val isInGym: Boolean = true,
-    val registrationDate: Long = System.currentTimeMillis()
+    var isInGym: Boolean = false,
+    val registrationDate: Long = System.currentTimeMillis(),
+    var attendanceThisWeek: Int = 0,
+    var lastAttendanceReset: Long = System.currentTimeMillis()
 ) {
 
     fun checkPaymentStatus(): Member {

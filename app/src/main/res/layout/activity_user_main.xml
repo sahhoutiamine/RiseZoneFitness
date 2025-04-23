@@ -34,7 +34,7 @@
         app:itemRippleColor="@android:color/transparent"
         app:itemBackground="@null"
         app:itemIconTint="@color/primary_color"
-        app:menu="@menu/admin_bottom_nav_menu" />
+        app:menu="@menu/user_bottom_nav_menu" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

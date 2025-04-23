@@ -60,18 +60,21 @@ class LoginActivity : AppCompatActivity() {
                 val username = loginUsername.text.toString()
                 val password = loginPassword.text.toString()
                 for (admin in listAdmins) {
-                if (username == admin.username && password == admin.password) {
-                    val intent = Intent(this, AdminMainActivity::class.java)
-                    startActivity(intent)
-                }
-                else {
-                    pwTextLayout.error = "Invalid email or password"
-                }
-                    break
+                    if (username == admin.username && password == admin.password) {
+                        val intent = Intent(this, AdminMainActivity::class.java)
+                        startActivity(intent)
+                    }
+                    else {
+                        for (member in listMembers) {
+                            if (username == member.username && password == member.password) {
+                                val intent = Intent(this, UserMainActivity::class.java)
+                                intent.putExtra("username", username)
+                                startActivity(intent)
+                            }
+                        }
+                    }
                 }
             }
-
-
         }
     }
 }

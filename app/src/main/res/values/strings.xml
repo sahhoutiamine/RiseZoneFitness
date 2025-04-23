@@ -56,4 +56,8 @@
     <string name="not_subscribed">Not Subscribed</string>
     <string name="change">Change</string>
     <string name="change_sent">Are you sure you want to change the subscription status?</string>
+    <string name="thanks_sent">Thanks for your discipline HERO, Enjoy !!</string>
+    <string name="let_s_go">Cancel</string>
+    <string name="week_streak">Week Streak</string>
+    <string name="last_session">Last Session</string>
 </resources>

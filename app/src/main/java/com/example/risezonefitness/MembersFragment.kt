@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,17 +21,12 @@ class MembersFragment(private val members: List<Member>) : Fragment(R.layout.fra
         super.onViewCreated(view, savedInstanceState)
         (activity as? AdminMainActivity)?.updateToolbarTitle("Members")
 
-
-
-
         bottomNav = requireActivity().findViewById(R.id.bottomNav)
         recyclerView = view.findViewById(R.id.recyclerViewMembers)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         adapter = MemberAdapter(members, requireContext())
         recyclerView.adapter = adapter
-
-
 
         val tabs = listOf("All", "Subscriber", "Not Subscriber")
         val tabLayout = view.findViewById<TabLayout>(R.id.filterTabs)
@@ -41,7 +35,6 @@ class MembersFragment(private val members: List<Member>) : Fragment(R.layout.fra
             tabLayout.addTab(tabLayout.newTab().setText(it))
         }
 
-
         var lastSelectedTabIndex = 0
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -49,6 +42,11 @@ class MembersFragment(private val members: List<Member>) : Fragment(R.layout.fra
                 val selected = tab.text.toString()
                 val currentIndex = tab.position
                 val isLeft = currentIndex > lastSelectedTabIndex
+
+                if (!isBottomNavVisible) {
+                    bottomNav.animate().translationY(0f).setDuration(150).start()
+                    isBottomNavVisible = true
+                }
 
                 val filteredList = when (selected) {
                     "All" -> listMembers
@@ -62,15 +60,14 @@ class MembersFragment(private val members: List<Member>) : Fragment(R.layout.fra
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                if (!isBottomNavVisible) {
+                    bottomNav.animate().translationY(0f).setDuration(150).start()
+                    isBottomNavVisible = true
+                }
+            }
         })
-
-
-
-
-
-
-
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -85,21 +82,6 @@ class MembersFragment(private val members: List<Member>) : Fragment(R.layout.fra
                 }
             }
         })
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (!isBottomNavVisible) {
-                    bottomNav.animate()
-                        .translationY(0f)
-                        .setDuration(150)
-                        .start()
-                    isBottomNavVisible = true
-                } else {
-                    requireActivity().onBackPressed()
-                }
-            }
-        })
-
     }
 
     private fun updateAdapter(members: List<Member>) {
@@ -107,7 +89,6 @@ class MembersFragment(private val members: List<Member>) : Fragment(R.layout.fra
         recyclerView.adapter = adapter
     }
 
-//
     private fun animateRecyclerSwap(newList: List<Member>, isLeft: Boolean) {
         val outAnim = AnimationUtils.loadAnimation(
             requireContext(),
@@ -132,8 +113,4 @@ class MembersFragment(private val members: List<Member>) : Fragment(R.layout.fra
             override fun onAnimationRepeat(animation: Animation?) {}
         })
     }
-
-
-
-
 }

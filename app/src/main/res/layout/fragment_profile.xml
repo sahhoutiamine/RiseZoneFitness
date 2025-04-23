@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context=".ProfileActivity"
-    android:scrollbars="none">
+    android:scrollbars="none"
+    tools:context=".ProfileFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profileConstraintLayout"
@@ -26,22 +26,11 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageButton
-            android:id="@+id/btnEdit"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_edit"
-            android:contentDescription="@string/edit_icon"
-            android:scaleType="centerInside"
-            android:background="@android:color/transparent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
         <ImageView
             android:id="@+id/imgMemberAvatar"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="50dp"
             android:contentDescription="@string/profile"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_person"
@@ -169,9 +158,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
             </LinearLayout>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         <GridLayout
             android:id="@+id/cardsCon"
@@ -260,7 +247,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:text="@string/username"
+                        android:text="@string/week_streak"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         style="@style/TitleTextStyle"
@@ -290,7 +277,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:text="@string/password"
+                        android:text="@string/last_session"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         style="@style/TitleTextStyle"
@@ -372,61 +359,6 @@
             </androidx.cardview.widget.CardView>
 
         </GridLayout>
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintTop_toBottomOf="@id/cardsCon"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <ImageButton
-                android:id="@+id/btnEmail"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_sent_email"
-                android:contentDescription="@string/email"
-                android:scaleType="centerInside"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/btnSubscribed"
-                app:layout_constraintBottom_toBottomOf="@id/btnSubscribed"
-                app:tint="@color/primary_color" />
-
-            <Button
-                android:id="@+id/btnSubscribed"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/subscribed"
-                android:padding="12dp"
-                style="@style/buttonStyle"
-                android:layout_marginStart="14dp"
-                app:layout_constraintStart_toEndOf="@id/btnEmail"
-                app:layout_constraintEnd_toStartOf="@+id/btnDelete"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginEnd="8dp" />
-
-
-            <ImageButton
-                android:id="@+id/btnDelete"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_delete"
-                android:layout_marginBottom="4dp"
-                android:contentDescription="@string/delete"
-                android:scaleType="centerInside"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/btnSubscribed"
-                app:layout_constraintBottom_toBottomOf="@id/btnSubscribed"
-                app:tint="@color/red" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>
