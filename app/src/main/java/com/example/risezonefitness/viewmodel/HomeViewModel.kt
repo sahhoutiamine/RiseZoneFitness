@@ -10,6 +10,13 @@ class HomeViewModel : ViewModel() {
 
     private val db = FirebaseFirestore.getInstance()
 
+    fun getFullName(username: String) = liveData(Dispatchers.IO) {
+        val membersRef = db.collection("Admins")
+        val member = membersRef.whereEqualTo("username", username).get().await().documents.firstOrNull()
+        val fullName = member?.getString("fullName") ?: "User"
+        emit(fullName)
+    }
+
     val totalMembers = liveData(Dispatchers.IO) {
         val membersRef = db.collection("Members")
         val total = membersRef.get().await().size()

@@ -30,7 +30,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val membersInGymTextView = view.findViewById<TextView>(R.id.membersInGymTextView)
         val nonSubscribedTextView = view.findViewById<TextView>(R.id.nonSubscribedTextView)
 
-        welcomeTextView.text = "Welcome, $username 👋"
+        username?.let {
+            homeViewModel.getFullName(it).observe(viewLifecycleOwner, Observer { fullName ->
+                welcomeTextView.text = "Welcome, $fullName"
+            })
+        }
 
         homeViewModel.totalMembers.observe(viewLifecycleOwner, Observer { count ->
             totalMembersTextView.text = "Total Members: $count"
