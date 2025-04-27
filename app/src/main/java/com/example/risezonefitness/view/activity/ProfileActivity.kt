@@ -3,11 +3,14 @@ package com.example.risezonefitness.view.activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.risezonefitness.viewmodel.ProfileViewModel
@@ -95,80 +98,83 @@ class ProfileActivity : AppCompatActivity() {
                         startActivity(intent)
                     }
 
-//                    btnDelete.setOnClickListener {
-//                        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_delete_confirmation, null)
-//                        val dialog = AlertDialog.Builder(this)
-//                            .setView(dialogView)
-//                            .setCancelable(false)
-//                            .create()
-//
-//                        dialogView.findViewById<TextView>(R.id.btnCancel).setOnClickListener {
-//                            dialog.dismiss()
-//                        }
-//
-//                        dialogView.findViewById<TextView>(R.id.btnDeleteConfirm).setOnClickListener {
-//                           listMembers.removeAt()
-//                            dialog.dismiss()
-//                            val intent = Intent(this, AdminMainActivity::class.java)
-//                            intent.putExtra("fragmentToLoad", "members")
-//                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-//                            startActivity(intent)
-//                            finish()
-//                        }
-//
-//                        dialog.show()
-//                    }
+                    btnDelete.setOnClickListener {
+                        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_delete_confirmation, null)
+                        val dialog = AlertDialog.Builder(this)
+                            .setView(dialogView)
+                            .setCancelable(false)
+                            .create()
 
-//                    btnEmail.setOnClickListener {
-//                        if (member.isPaid) {
-//                            Toast.makeText(this, "The member is subscribed.", Toast.LENGTH_SHORT).show()
-//                        } else {
-//                            val subject = "Your RiseZone Subscription Has Expired"
-//                            val body = "Hello ${member.fullName},\n\nWe hope you're doing well.\n\nThis is a reminder that your subscription to RiseZone has expired.\n\nTo continue benefiting from our services, please renew your subscription at your earliest convenience.\n\nThank you for being part of RiseZone!"
-//
-//                            val emailIntent = Intent(Intent.ACTION_SEND).apply {
-//                                type = "message/rfc822"
-//                                putExtra(Intent.EXTRA_EMAIL, arrayOf(member.email))
-//                                putExtra(Intent.EXTRA_SUBJECT, subject)
-//                                putExtra(Intent.EXTRA_TEXT, body)
-//                            }
-//
-//                            if (emailIntent.resolveActivity(packageManager) != null) {
-//                                startActivity(Intent.createChooser(emailIntent, "Send email using"))
-//                            } else {
-//                                Toast.makeText(this, "No email app found.", Toast.LENGTH_SHORT).show()
-//                            }
-//                        }
-//                    }
+                        dialogView.findViewById<TextView>(R.id.btnCancel).setOnClickListener {
+                            dialog.dismiss()
+                        }
+
+                        dialogView.findViewById<TextView>(R.id.btnDeleteConfirm).setOnClickListener {
+                            if (documentId != null) {
+                                profileViewModel.deleteMember(documentId)
+                            }
+                            dialog.dismiss()
+                            val intent = Intent(this, AdminMainActivity::class.java)
+                            intent.putExtra("fragmentToLoad", "members")
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                            startActivity(intent)
+                            finish()
+                        }
+
+                        dialog.show()
+                    }
 
 
-//                    btnSubscribed.setOnClickListener {
-//                        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_confirm_change, null)
-//                        val dialog = AlertDialog.Builder(this)
-//                            .setView(dialogView)
-//                            .setCancelable(false)
-//                            .create()
-//
-//                        dialogView.findViewById<TextView>(R.id.btnChange).setOnClickListener {
-//                            member.isPaid = !member.isPaid
-//
-//
-//                            btnSubscribed.text = if (member.isPaid) getString(R.string.subscribed) else getString(R.string.not_subscribed)
-//
-//
-//                            textSubscriptionStatus.text = if (member.isPaid) "Subscribed" else "Not Subscribed"
-//                            textSubscriptionStatus.setTextColor(if (member.isPaid) Color.GREEN else Color.RED)
-//
-//
-//                            dialog.dismiss()
-//                        }
-//
-//                        dialogView.findViewById<TextView>(R.id.btnCancel).setOnClickListener {
-//                            dialog.dismiss()
-//                        }
-//
-//                        dialog.show()
-//                    }
+                    btnEmail.setOnClickListener {
+                        if (member.isPaid) {
+                            Toast.makeText(this, "The member is subscribed.", Toast.LENGTH_SHORT).show()
+                        } else {
+                            val subject = "Your RiseZone Subscription Has Expired"
+                            val body = "Hello ${member.fullName},\n\nWe hope you're doing well.\n\nThis is a reminder that your subscription to RiseZone has expired.\n\nTo continue benefiting from our services, please renew your subscription at your earliest convenience.\n\nThank you for being part of RiseZone!"
+
+                            val emailIntent = Intent(Intent.ACTION_SEND).apply {
+                                type = "message/rfc822"
+                                putExtra(Intent.EXTRA_EMAIL, arrayOf(member.email))
+                                putExtra(Intent.EXTRA_SUBJECT, subject)
+                                putExtra(Intent.EXTRA_TEXT, body)
+                            }
+
+                            if (emailIntent.resolveActivity(packageManager) != null) {
+                                startActivity(Intent.createChooser(emailIntent, "Send email using"))
+                            } else {
+                                Toast.makeText(this, "No email app found.", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+
+
+                    btnSubscribed.setOnClickListener {
+                        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_confirm_change, null)
+                        val dialog = AlertDialog.Builder(this)
+                            .setView(dialogView)
+                            .setCancelable(false)
+                            .create()
+
+                        dialogView.findViewById<TextView>(R.id.btnChange).setOnClickListener {
+                            val documentId = intent.getStringExtra("document_id") // الحصول على ID العضو
+                            if (documentId != null) {
+                                profileViewModel.updateSubscriptionStatus(documentId, !member.isPaid)
+                            }
+
+                            btnSubscribed.text = if (member.isPaid) getString(R.string.subscribed) else getString(R.string.not_subscribed)
+                            textSubscriptionStatus.text = if (member.isPaid) getString(R.string.subscribed) else getString(R.string.not_subscribed)
+                            textSubscriptionStatus.setTextColor(if (member.isPaid) Color.GREEN else Color.RED)
+
+                            dialog.dismiss()
+                        }
+
+                        dialogView.findViewById<TextView>(R.id.btnCancel).setOnClickListener {
+                            dialog.dismiss()
+                        }
+
+                        dialog.show()
+                    }
+
 
                 }
             })

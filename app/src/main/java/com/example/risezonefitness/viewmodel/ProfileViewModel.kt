@@ -2,9 +2,14 @@ package com.example.risezonefitness.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.risezonefitness.model.Member
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -15,6 +20,13 @@ class ProfileViewModel : ViewModel() {
     val memberLiveData = MutableLiveData<Member>()
 
     private var snapshotListener: ListenerRegistration? = null
+
+    private val _deleteStatus = MutableStateFlow<Resource<Boolean>>(Resource.Loading())
+    val deleteStatus: StateFlow<Resource<Boolean>> get() = _deleteStatus
+
+    private val _updateStatus = MutableStateFlow<Resource<Boolean>>(Resource.Loading())
+    val updateStatus: StateFlow<Resource<Boolean>> get() = _updateStatus
+
 
     fun startListeningToMemberProfile(username: String) {
         snapshotListener = db.collection("Members")
@@ -32,6 +44,37 @@ class ProfileViewModel : ViewModel() {
                     }
                 }
             }
+    }
+
+    fun deleteMember(documentId: String) {
+        viewModelScope.launch {
+            try {
+                db.collection("Members")
+                    .document(documentId)
+                    .delete()
+                    .await()
+
+                _deleteStatus.value = Resource.Success(true)
+            } catch (e: Exception) {
+                _deleteStatus.value = Resource.Error("Error occurred while deleting: ${e.message}")
+            }
+        }
+    }
+
+    fun updateSubscriptionStatus(documentId: String, isPaid: Boolean) {
+        viewModelScope.launch {
+            try {
+                db.collection("Members")
+                    .document(documentId)
+                    .update("paid", isPaid)
+                    .await()
+
+
+                _updateStatus.value = Resource.Success(true)
+            } catch (e: Exception) {
+                _updateStatus.value = Resource.Error("Error occurred while updating subscription: ${e.message}")
+            }
+        }
     }
 
 
@@ -56,4 +99,9 @@ class ProfileViewModel : ViewModel() {
         }
 
     }
+}
+sealed class Resource<T> {
+    data class Success<T>(val data: T) : Resource<T>()
+    data class Error<T>(val message: String) : Resource<T>()
+    class Loading<T> : Resource<T>()
 }

@@ -118,7 +118,6 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/phone"
                     android:layout_marginTop="16dp"
-                    app:prefixText="+212"
                     app:errorEnabled="true"
                     app:endIconMode="clear_text"
                     app:startIconDrawable="@drawable/phone_ic"
@@ -130,7 +129,7 @@
                         android:id="@+id/phoneInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxLength="9"
+                        android:maxLength="13"
                         android:inputType="phone" />
                 </com.google.android.material.textfield.TextInputLayout>
 
