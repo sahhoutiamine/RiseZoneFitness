@@ -24,7 +24,6 @@ class UserMainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user_main)
 
         bottomNav = findViewById(R.id.bottomNav)
-
         val toolbar = findViewById<Toolbar>(R.id.topAppBar)
         setSupportActionBar(toolbar)
 
@@ -84,13 +83,10 @@ class UserMainActivity : AppCompatActivity() {
         }, 2000)
     }
 
-
     private fun openFragment(fragment: Fragment) {
-        username?.let {
-            val bundle = Bundle()
-            bundle.putString("username", it)
-            fragment.arguments = bundle
-        }
+        val bundle = Bundle()
+        bundle.putString("username", username)
+        fragment.arguments = bundle
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, fragment)

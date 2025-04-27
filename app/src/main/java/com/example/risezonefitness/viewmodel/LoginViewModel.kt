@@ -27,7 +27,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 .addOnSuccessListener { adminResult ->
                     if (!adminResult.isEmpty) {
                         saveUserInfo(username, "admin")
-                        _loginState.value = LoginState.AdminSuccess
+                        _loginState.value = LoginState.AdminSuccess(username)
                     } else {
                         firestore.collection("Members")
                             .whereEqualTo("username", username)
@@ -36,7 +36,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                             .addOnSuccessListener { memberResult ->
                                 if (!memberResult.isEmpty) {
                                     saveUserInfo(username, "member")
-                                    _loginState.value = LoginState.MemberSuccess
+                                    _loginState.value = LoginState.MemberSuccess(username)
                                 } else {
                                     _loginState.value = LoginState.Failure("Incorrect username or password")
                                 }
@@ -61,10 +61,11 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     sealed class LoginState {
-        object Idle : LoginState()
         object Loading : LoginState()
-        object AdminSuccess : LoginState()
-        object MemberSuccess : LoginState()
+        data class AdminSuccess(val username: String) : LoginState()
+        data class MemberSuccess(val username: String) : LoginState()
         data class Failure(val message: String) : LoginState()
+        object Idle : LoginState()
     }
+
 }

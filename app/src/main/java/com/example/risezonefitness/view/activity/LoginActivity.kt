@@ -31,21 +31,21 @@ class LoginActivity : AppCompatActivity() {
 
         val isLoggedIn = sharedPref.getBoolean("is_logged_in", false)
         val userType = sharedPref.getString("user_type", null)
+        val username = sharedPref.getString("username", null)
 
-        if (isLoggedIn && userType != null) {
-            when (userType) {
-                "admin" -> {
-                    startActivity(Intent(this, AdminMainActivity::class.java))
-                    finish()
-                    return
-                }
-                "member" -> {
-                    startActivity(Intent(this, UserMainActivity::class.java))
-                    finish()
-                    return
-                }
-            }
+
+        if (isLoggedIn && userType != null && username != null) {
+            val intent = Intent(this@LoginActivity, when (userType) {
+                "admin" -> AdminMainActivity::class.java
+                "member" -> UserMainActivity::class.java
+                else -> null
+            })
+
+            intent?.putExtra("username", username)
+            startActivity(intent)
+            finish()
         }
+
 
         setContentView(R.layout.activity_login)
 
@@ -89,13 +89,16 @@ class LoginActivity : AppCompatActivity() {
         lifecycleScope.launchWhenStarted {
             viewModel.loginState.collect { state ->
                 when (state) {
-                    is LoginViewModel.LoginState.Loading -> {}
+                    is LoginViewModel.LoginState.Loading -> {
+                    }
                     is LoginViewModel.LoginState.AdminSuccess -> {
                         startActivity(Intent(this@LoginActivity, AdminMainActivity::class.java))
                         finish()
                     }
                     is LoginViewModel.LoginState.MemberSuccess -> {
-                        startActivity(Intent(this@LoginActivity, UserMainActivity::class.java))
+                        val intent = Intent(this@LoginActivity, UserMainActivity::class.java)
+                        intent.putExtra("username", state.username)
+                        startActivity(intent)
                         finish()
                     }
                     is LoginViewModel.LoginState.Failure -> {
@@ -105,5 +108,6 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
+
     }
 }

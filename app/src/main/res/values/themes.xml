@@ -94,6 +94,11 @@
     </style>
 
 
+    <style name="bgTheme" parent="Widget.MaterialComponents.CardView">
+        <item name="android:background">@color/white</item>
+    </style>
+
+
 
 
 

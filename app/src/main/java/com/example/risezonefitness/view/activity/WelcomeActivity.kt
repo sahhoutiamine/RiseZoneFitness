@@ -58,7 +58,7 @@ class WelcomeActivity : AppCompatActivity() {
                 .get()
                 .addOnSuccessListener { result ->
                     lifecycleScope.launch {
-                        delay(1000)
+                        delay(2500)
                         loadingAnimation.cancelAnimation()
                         loadingAnimation.visibility = LottieAnimationView.GONE
                         goToLoginActivity()

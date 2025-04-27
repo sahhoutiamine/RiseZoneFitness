@@ -9,9 +9,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.risezonefitness.R
-import com.example.risezonefitness.data.listMembers
 import com.example.risezonefitness.view.activity.UserMainActivity
+import com.example.risezonefitness.viewmodel.UserProfileViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -31,8 +32,10 @@ class UserProfileFragment : Fragment() {
     private lateinit var textSubscriptionStatus: TextView
     private lateinit var btnBack: ImageButton
     private lateinit var imgAvatar: ImageView
-    private var username: String? = null
 
+    private val viewModel: UserProfileViewModel by activityViewModels()
+
+    private var username: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,33 +65,47 @@ class UserProfileFragment : Fragment() {
 
         username = arguments?.getString("username")
 
-        val member = listMembers.find { it.username == username }
-
-        member?.let {
-            textFullName.text = it.fullName
-            textAge.text = it.age.toString()
-            textGender.text = it.gender
-            textPhoneNumber.text = it.phoneNumber
-            textEmail.text = it.email
-            textCin.text = it.cin
-            textWeekStreak.text = it.attendanceThisWeek.toString()
-
-            val lastSessionFormatted = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                .format(Date(it.lastAttendanceReset))
-            textLastSession.text = lastSessionFormatted
-
-            val regDateFormatted = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                .format(Date(it.registrationDate))
-            textRegistrationDate.text = regDateFormatted
-
-            textSubscriptionStatus.text = if (it.isPaid) "Subscribed" else "Not Subscribed"
-            textStatus.text = if (it.isInGym) "In Gym" else "Not In Gym"
-
-            it.imageResource?.let { bitmap ->
-                imgAvatar.setImageBitmap(bitmap)
-            }
+        username?.let {
+            viewModel.listenToUserProfile(it)
         }
 
+        observeUserProfile()
+
+        setupScrollViewBehavior(view)
+
+        return view
+    }
+
+    private fun observeUserProfile() {
+        viewModel.userProfile.observe(viewLifecycleOwner) { member ->
+            member?.let {
+                textFullName.text = it.fullName
+                textAge.text = it.age.toString()
+                textGender.text = it.gender
+                textPhoneNumber.text = it.phoneNumber
+                textEmail.text = it.email
+                textCin.text = it.cin
+                textWeekStreak.text = it.attendanceThisWeek.toString()
+
+                val lastSessionFormatted = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                    .format(Date(it.lastAttendanceReset))
+                textLastSession.text = lastSessionFormatted
+
+                val regDateFormatted = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                    .format(Date(it.registrationDate))
+                textRegistrationDate.text = regDateFormatted
+
+                textSubscriptionStatus.text = if (it.isPaid) "Subscribed" else "Not Subscribed"
+                textStatus.text = if (it.isInGym) "In Gym" else "Not In Gym"
+
+                it.imageResource?.let { bitmap ->
+                    imgAvatar.setImageBitmap(bitmap)
+                }
+            }
+        }
+    }
+
+    private fun setupScrollViewBehavior(view: View) {
         val scrollView = view.findViewById<NestedScrollView>(R.id.scrollView)
         var lastScrollY = 0
         scrollView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
@@ -103,7 +120,5 @@ class UserProfileFragment : Fragment() {
 
             lastScrollY = scrollY
         }
-
-        return view
     }
 }
