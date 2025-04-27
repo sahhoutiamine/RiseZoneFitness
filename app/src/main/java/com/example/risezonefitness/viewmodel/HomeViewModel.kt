@@ -1,5 +1,4 @@
-package com.example.risezonefitness
-
+package com.example.risezonefitness.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData

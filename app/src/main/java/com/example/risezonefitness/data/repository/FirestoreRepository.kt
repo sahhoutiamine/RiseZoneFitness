@@ -1,4 +1,4 @@
-package com.example.risezonefitness
+package com.example.risezonefitness.data.repository
 
 import com.example.risezonefitness.model.Member
 import com.google.firebase.firestore.FirebaseFirestore

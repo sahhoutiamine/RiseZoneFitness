@@ -1,14 +1,12 @@
-package com.example.risezonefitness
+package com.example.risezonefitness.viewmodel
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.risezonefitness.model.Member
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-import kotlin.jvm.java
-import kotlin.let
 
 class ProfileViewModel : ViewModel() {
 

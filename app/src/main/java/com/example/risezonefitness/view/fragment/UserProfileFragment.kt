@@ -1,4 +1,4 @@
-package com.example.risezonefitness
+package com.example.risezonefitness.view.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,8 +9,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import com.example.risezonefitness.R
+import com.example.risezonefitness.data.listMembers
+import com.example.risezonefitness.view.activity.UserMainActivity
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class UserProfileFragment : Fragment() {
 

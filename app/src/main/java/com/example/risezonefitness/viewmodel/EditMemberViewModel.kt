@@ -1,5 +1,4 @@
-package com.example.risezonefitness
-
+package com.example.risezonefitness.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -7,9 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import com.example.risezonefitness.model.Member
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
-import kotlin.jvm.java
-import kotlin.let
-
 
 class EditMemberViewModel(application: Application) : AndroidViewModel(application) {
 

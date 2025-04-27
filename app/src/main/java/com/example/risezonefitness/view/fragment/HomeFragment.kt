@@ -1,4 +1,4 @@
-package com.example.risezonefitness
+package com.example.risezonefitness.view.fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -8,6 +8,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.example.risezonefitness.viewmodel.HomeViewModel
+import com.example.risezonefitness.R
+import com.example.risezonefitness.view.activity.AdminMainActivity
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 

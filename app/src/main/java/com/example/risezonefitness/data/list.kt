@@ -1,4 +1,4 @@
-package com.example.risezonefitness
+package com.example.risezonefitness.data
 
 import com.example.risezonefitness.model.Admin
 import com.example.risezonefitness.model.Member

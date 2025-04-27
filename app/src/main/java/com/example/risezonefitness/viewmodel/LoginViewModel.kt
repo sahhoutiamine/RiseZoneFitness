@@ -1,7 +1,6 @@
-package com.example.risezonefitness
+package com.example.risezonefitness.viewmodel
 
 import android.app.Application
-import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore

@@ -1,6 +1,5 @@
-package com.example.risezonefitness
+package com.example.risezonefitness.view.activity
 
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -9,9 +8,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.work.PeriodicWorkRequestBuilder
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.work.WorkManager
+import com.example.risezonefitness.view.fragment.HomeFragment
+import com.example.risezonefitness.view.fragment.MembersFragment
+import com.example.risezonefitness.utils.PaymentCheckWorker
+import com.example.risezonefitness.R
+import com.example.risezonefitness.view.fragment.SettingsFragment
+import com.example.risezonefitness.data.listMembers
 import com.example.risezonefitness.model.Member
+import com.example.risezonefitness.view.fragment.AddFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.concurrent.TimeUnit
 
 class AdminMainActivity : AppCompatActivity() {
@@ -31,7 +37,7 @@ class AdminMainActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.topAppBar)
         setSupportActionBar(toolbar)
 
-        val sharedPref = getSharedPreferences("user_settings", Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("user_settings", MODE_PRIVATE)
         val lastFragment = sharedPref.getString("last_fragment", null)
 
         if (lastFragment == "settings") {
@@ -98,7 +104,7 @@ class AdminMainActivity : AppCompatActivity() {
             3, TimeUnit.DAYS
         ).build()
 
-        WorkManager.getInstance(this).enqueue(workRequest)
+        WorkManager.Companion.getInstance(this).enqueue(workRequest)
     }
 
     private fun openFragment(fragment: Fragment) {
@@ -112,4 +118,3 @@ class AdminMainActivity : AppCompatActivity() {
         toolbar.title = title
     }
 }
-

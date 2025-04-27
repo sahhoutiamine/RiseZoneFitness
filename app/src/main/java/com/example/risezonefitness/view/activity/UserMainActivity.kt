@@ -1,4 +1,4 @@
-package com.example.risezonefitness
+package com.example.risezonefitness.view.activity
 
 import android.os.Bundle
 import android.os.Handler
@@ -7,6 +7,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import com.example.risezonefitness.R
+import com.example.risezonefitness.view.fragment.UserProfileFragment
+import com.example.risezonefitness.view.fragment.QrScannerFragment
+import com.example.risezonefitness.view.fragment.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class UserMainActivity : AppCompatActivity() {

@@ -1,5 +1,6 @@
-package com.example.risezonefitness
+package com.example.risezonefitness.view.activity
 
+import android.R
 import android.app.AlertDialog
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.example.risezonefitness.viewmodel.EditMemberViewModel
 import com.example.risezonefitness.databinding.ActivityEditMemberBinding
 import com.example.risezonefitness.databinding.DialogConfirmSaveBinding
 import com.example.risezonefitness.model.Member
@@ -79,7 +81,7 @@ class EditMemberActivity : AppCompatActivity() {
             .setCancelable(false)
 
         val alertDialog = dialogBuilder.create()
-        alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        alertDialog.window?.setBackgroundDrawableResource(R.color.transparent)
 
         dialogBinding.btnCancel.setOnClickListener {
             alertDialog.dismiss()

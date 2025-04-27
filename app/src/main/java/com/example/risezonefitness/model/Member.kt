@@ -1,9 +1,9 @@
 package com.example.risezonefitness.model
 
 import android.graphics.Bitmap
-import com.example.risezonefitness.GmailSender
-import com.example.risezonefitness.listMembers
-import com.example.risezonefitness.unpaidMembersList
+import com.example.risezonefitness.utils.GmailSender
+import com.example.risezonefitness.data.listMembers
+import com.example.risezonefitness.data.unpaidMembersList
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.IgnoreExtraProperties
 

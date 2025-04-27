@@ -1,4 +1,4 @@
-package com.example.risezonefitness
+package com.example.risezonefitness.view.fragment
 
 import android.Manifest
 import android.app.AlertDialog
@@ -23,15 +23,18 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
+import com.example.risezonefitness.R
+import com.example.risezonefitness.view.activity.UserMainActivity
+import com.example.risezonefitness.data.entryLogList
+import com.example.risezonefitness.data.listMembers
+import com.example.risezonefitness.model.AttendanceManager
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
 import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.find
-import kotlin.let
-import kotlin.text.trim
+import java.util.Date
+import java.util.Locale
 
 class QrScannerFragment : Fragment() {
 

@@ -1,6 +1,6 @@
-package com.example.risezonefitness
+package com.example.risezonefitness.view.activity
 
-
+import android.R
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +9,6 @@ import android.os.Looper
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.risezonefitness.databinding.ActivitySplashBinding
-
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
@@ -32,7 +31,7 @@ class SplashActivity : AppCompatActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this, WelcomeActivity::class.java))
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             finish()
         }, 5000)
     }

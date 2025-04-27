@@ -1,4 +1,4 @@
-package com.example.risezonefitness
+package com.example.risezonefitness.view.fragment
 
 import android.os.Bundle
 import android.view.View
@@ -9,7 +9,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.risezonefitness.view.adapter.MemberAdapter
+import com.example.risezonefitness.viewmodel.MembersViewModel
+import com.example.risezonefitness.R
 import com.example.risezonefitness.model.Member
+import com.example.risezonefitness.view.activity.AdminMainActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 

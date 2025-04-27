@@ -1,10 +1,11 @@
-package com.example.risezonefitness
+package com.example.risezonefitness.view.activity
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.lottie.LottieAnimationView
+import com.example.risezonefitness.R
 
 class WelcomeActivity : AppCompatActivity() {
 
@@ -30,4 +31,3 @@ class WelcomeActivity : AppCompatActivity() {
         }
     }
 }
-

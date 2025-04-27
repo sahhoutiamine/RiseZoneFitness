@@ -1,20 +1,20 @@
-package com.example.risezonefitness
+package com.example.risezonefitness.view.activity
 
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.example.risezonefitness.viewmodel.ProfileViewModel
+import com.example.risezonefitness.R
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -76,7 +76,10 @@ class ProfileActivity : AppCompatActivity() {
                     textCin.text = it.cin
                     textUsername.text = it.username
                     textPassword.text = it.password
-                    textRegistrationDate.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(it.registrationDate))
+                    textRegistrationDate.text = SimpleDateFormat(
+                        "dd/MM/yyyy",
+                        Locale.getDefault()
+                    ).format(Date(it.registrationDate))
                     textSubscriptionStatus.text = if (it.isPaid) "Subscribed" else "Not Subscribed"
                     textSubscriptionStatus.setTextColor(if (it.isPaid) Color.GREEN else Color.RED)
 

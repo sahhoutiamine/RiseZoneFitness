@@ -1,4 +1,4 @@
-package com.example.risezonefitness
+package com.example.risezonefitness.view.fragment
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -16,6 +16,9 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.risezonefitness.viewmodel.AddMemberViewModel
+import com.example.risezonefitness.view.activity.AdminMainActivity
+import com.example.risezonefitness.R
 import com.example.risezonefitness.model.Member
 import com.google.android.material.textfield.TextInputEditText
 

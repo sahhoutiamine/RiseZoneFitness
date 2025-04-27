@@ -1,8 +1,9 @@
-package com.example.risezonefitness
+package com.example.risezonefitness.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.risezonefitness.data.repository.FirestoreRepository
 import com.example.risezonefitness.model.Member
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

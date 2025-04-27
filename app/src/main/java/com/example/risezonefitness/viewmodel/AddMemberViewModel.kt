@@ -1,5 +1,4 @@
-package com.example.risezonefitness
-
+package com.example.risezonefitness.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -7,8 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.risezonefitness.model.Member
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
-import kotlin.to
-
 
 class AddMemberViewModel(application: Application) : AndroidViewModel(application) {
 

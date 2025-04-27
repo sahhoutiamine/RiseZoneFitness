@@ -1,11 +1,7 @@
-package com.example.risezonefitness
+package com.example.risezonefitness.model
 
-
-
-import com.example.risezonefitness.model.Member
+import com.example.risezonefitness.data.memberAttendanceDays
 import java.util.Calendar
-import kotlin.apply
-import kotlin.collections.set
 
 object AttendanceManager {
 
