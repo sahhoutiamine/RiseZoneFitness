@@ -34,14 +34,14 @@ class UserMainActivity : AppCompatActivity() {
             bottomNav.selectedItemId = R.id.nav_settings
             sharedPref.edit().remove("last_fragment").apply()
         } else {
-            openFragment(ProfileFragment())
+            openFragment(UserProfileFragment())
             bottomNav.selectedItemId = R.id.nav_profile
         }
 
         bottomNav.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_profile -> {
-                    openFragment(ProfileFragment())
+                    openFragment(UserProfileFragment())
                     true
                 }
                 R.id.nav_qr_scanner -> {

@@ -1,33 +1,21 @@
 package com.example.risezonefitness
 
-
-
-import android.app.Activity
 import android.app.AlertDialog
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.risezonefitness.databinding.ActivityEditMemberBinding
 import com.example.risezonefitness.databinding.DialogConfirmSaveBinding
+import com.example.risezonefitness.model.Member
 
 class EditMemberActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditMemberBinding
-    private var memberIndex: Int = -1
     private var selectedImageBitmap: Bitmap? = null
-
-    private val imagePicker = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let {
-            val inputStream = contentResolver.openInputStream(uri)
-            selectedImageBitmap = BitmapFactory.decodeStream(inputStream)
-            binding.profileImage.setImageBitmap(selectedImageBitmap)
-        }
-    }
+    private val editMemberViewModel: EditMemberViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,43 +23,56 @@ class EditMemberActivity : AppCompatActivity() {
         binding = ActivityEditMemberBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        memberIndex = intent.getIntExtra("member_index", -1)
-        if (memberIndex == -1 || memberIndex >= listMembers.size) {
-            Toast.makeText(this, "Invalid member", Toast.LENGTH_SHORT).show()
+        val documentId = intent.getStringExtra("document_id")
+
+        if (documentId != null) {
+            editMemberViewModel.startListeningToMember(documentId)
+
+            editMemberViewModel.memberLiveData.observe(this, { member ->
+                member?.let {
+                    binding.fullNameInput.setText(it.fullName)
+                    binding.ageInput.setText(it.age.toString())
+                    binding.genderInput.setText(it.gender)
+                    binding.phoneInput.setText(it.phoneNumber)
+                    binding.emailInput.setText(it.email)
+                    binding.signUpCIN.setText(it.cin)
+                    binding.usernameInput.setText(it.username)
+                    binding.passwordInput.setText(it.password)
+
+                    it.imageResource?.let {
+                        binding.profileImage.setImageBitmap(it)
+                        selectedImageBitmap = it
+                    }
+                }
+            })
+
+            binding.btnBack.setOnClickListener {
+                onBackPressed()
+            }
+
+            binding.saveButton.setOnClickListener {
+                val updatedMember = Member(
+                    fullName = binding.fullNameInput.text.toString(),
+                    age = binding.ageInput.text.toString().toIntOrNull() ?: 0,
+                    gender = binding.genderInput.text.toString(),
+                    phoneNumber = binding.phoneInput.text.toString(),
+                    email = binding.emailInput.text.toString(),
+                    cin = binding.signUpCIN.text.toString(),
+                    username = binding.usernameInput.text.toString(),
+                    password = binding.passwordInput.text.toString(),
+                    isPaid = true,
+                    isInGym = false,
+                    imageResource = selectedImageBitmap
+                )
+                showConfirmDialog(updatedMember, documentId)
+            }
+        } else {
+            Toast.makeText(this, "Invalid username", Toast.LENGTH_SHORT).show()
             finish()
-            return
-        }
-
-        val member = listMembers[memberIndex]
-
-        binding.fullNameInput.setText(member.fullName)
-        binding.ageInput.setText(member.age.toString())
-        binding.genderInput.setText(member.gender)
-        binding.phoneInput.setText(member.phoneNumber)
-        binding.emailInput.setText(member.email)
-        binding.signUpCIN.setText(member.cin)
-        binding.usernameInput.setText(member.username)
-        binding.passwordInput.setText(member.password)
-
-        member.imageResource?.let {
-            binding.profileImage.setImageBitmap(it)
-            selectedImageBitmap = it
-        }
-
-        binding.btnBack.setOnClickListener {
-            onBackPressed()
-        }
-
-        binding.profileImage.setOnClickListener {
-            imagePicker.launch("image/*")
-        }
-
-        binding.saveButton.setOnClickListener {
-            showConfirmDialog(member)
         }
     }
 
-    private fun showConfirmDialog(member: Member) {
+    private fun showConfirmDialog(updatedMember: Member, documentId: String) {
         val dialogBinding = DialogConfirmSaveBinding.inflate(LayoutInflater.from(this))
         val dialogBuilder = AlertDialog.Builder(this)
             .setView(dialogBinding.root)
@@ -85,29 +86,18 @@ class EditMemberActivity : AppCompatActivity() {
         }
 
         dialogBinding.btnConfirm.setOnClickListener {
-            val updatedMember = Member(
-                fullName = binding.fullNameInput.text.toString(),
-                age = binding.ageInput.text.toString().toIntOrNull() ?: 0,
-                gender = binding.genderInput.text.toString(),
-                phoneNumber = binding.phoneInput.text.toString(),
-                email = binding.emailInput.text.toString(),
-                cin = binding.signUpCIN.text.toString(),
-                username = binding.usernameInput.text.toString(),
-                password = binding.passwordInput.text.toString(),
-                isPaid = member.isPaid,
-                isInGym = member.isInGym,
-                registrationDate = member.registrationDate,
-                imageResource = selectedImageBitmap
-            )
 
-            listMembers[memberIndex] = updatedMember
-
+            editMemberViewModel.updateMemberInFirestore(updatedMember, documentId)
             Toast.makeText(this, "Member updated successfully", Toast.LENGTH_SHORT).show()
-            setResult(Activity.RESULT_OK)
             alertDialog.dismiss()
             finish()
         }
 
         alertDialog.show()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        editMemberViewModel.stopListening()
     }
 }

@@ -6,12 +6,17 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
 class LoginActivity : AppCompatActivity() {
+
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val sharedPref = getSharedPreferences("user_settings", Context.MODE_PRIVATE)
@@ -21,15 +26,12 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-
-
         val pwTextLayout = findViewById<TextInputLayout>(R.id.pwLoginText)
         val usernameTextLayout = findViewById<TextInputLayout>(R.id.usernameLoginText)
 
         val loginUsername = findViewById<TextInputEditText>(R.id.loginUsername)
         val loginPassword = findViewById<TextInputEditText>(R.id.loginPassword)
         val loginBtn = findViewById<Button>(R.id.loginButton)
-
 
         loginUsername.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -51,28 +53,33 @@ class LoginActivity : AppCompatActivity() {
             if (loginUsername.text.isNullOrEmpty()) {
                 usernameTextLayout.error = "Username is required"
                 return@setOnClickListener
-            }
-            else if (loginPassword.text.isNullOrEmpty()) {
+            } else if (loginPassword.text.isNullOrEmpty()) {
                 pwTextLayout.error = "Password is required"
                 return@setOnClickListener
+            } else {
+                val username = loginUsername.text.toString().trim()
+                val password = loginPassword.text.toString().trim()
+                viewModel.login(username, password)
             }
-            else {
-                val username = loginUsername.text.toString()
-                val password = loginPassword.text.toString()
-                for (admin in listAdmins) {
-                    if (username == admin.username && password == admin.password) {
-                        val intent = Intent(this, AdminMainActivity::class.java)
-                        startActivity(intent)
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.loginState.collect { state ->
+                when (state) {
+                    is LoginViewModel.LoginState.Loading -> {
                     }
-                    else {
-                        for (member in listMembers) {
-                            if (username == member.username && password == member.password) {
-                                val intent = Intent(this, UserMainActivity::class.java)
-                                intent.putExtra("username", username)
-                                startActivity(intent)
-                            }
-                        }
+                    is LoginViewModel.LoginState.AdminSuccess -> {
+                        startActivity(Intent(this@LoginActivity, AdminMainActivity::class.java))
+                        finish()
                     }
+                    is LoginViewModel.LoginState.MemberSuccess -> {
+                        startActivity(Intent(this@LoginActivity, UserMainActivity::class.java))
+                        finish()
+                    }
+                    is LoginViewModel.LoginState.Failure -> {
+                        Toast.makeText(this@LoginActivity, state.message, Toast.LENGTH_SHORT).show()
+                    }
+                    else -> {}
                 }
             }
         }

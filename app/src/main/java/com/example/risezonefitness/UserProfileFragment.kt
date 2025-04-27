@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ProfileFragment : Fragment() {
+class UserProfileFragment : Fragment() {
 
     private lateinit var textFullName: TextView
     private lateinit var textAge: TextView

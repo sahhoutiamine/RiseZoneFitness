@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:scrollbars="none"
-    tools:context=".ProfileFragment">
+    tools:context=".UserProfileFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profileConstraintLayout"

@@ -4,6 +4,8 @@ package com.example.risezonefitness
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.example.risezonefitness.model.addUnpaidMembers
+import com.example.risezonefitness.model.checkMembersAndNotify
 
 class PaymentCheckWorker(context: Context, workerParams: WorkerParameters) :
     Worker(context, workerParams) {

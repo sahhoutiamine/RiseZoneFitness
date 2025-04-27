@@ -15,6 +15,8 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.example.risezonefitness.model.Member
 import com.google.android.material.textfield.TextInputEditText
 
 class AddFragment : Fragment() {
@@ -30,6 +32,8 @@ class AddFragment : Fragment() {
     private lateinit var saveButton: Button
     private lateinit var profileImage: ImageView
     private var selectedImageUri: Uri? = null
+
+    private val addMemberViewModel: AddMemberViewModel by viewModels()
 
     private val imagePickerLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -99,8 +103,18 @@ class AddFragment : Fragment() {
             memberImage
         )
 
-        listMembers.add(newMember)
+        addMemberViewModel.addNewMember(newMember,
+            onSuccess = {
+                showSuccessDialog()
+                clearFields()
+            },
+            onFailure = { error ->
+                Toast.makeText(requireContext(), "Failed to add member: $error", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
 
+    private fun showSuccessDialog() {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_member_added, null)
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
@@ -110,13 +124,11 @@ class AddFragment : Fragment() {
         val okButton = dialogView.findViewById<Button>(R.id.okButton)
         okButton.setOnClickListener {
             dialog.dismiss()
-            clearFields()
+            requireActivity().supportFragmentManager.popBackStack()
         }
 
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.show()
-
-        requireActivity().supportFragmentManager.popBackStack()
     }
 
     private fun clearFields() {

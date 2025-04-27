@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "106685894102",
+    "project_id": "risezonefitness-49472",
+    "storage_bucket": "risezonefitness-49472.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:106685894102:android:2c027cfc01396df0e3e877",
+        "android_client_info": {
+          "package_name": "com.example.risezonefitness"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRRZiS_toK84f-TriTpYyyE402qoeYkmU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

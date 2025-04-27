@@ -1,23 +1,34 @@
-package com.example.risezonefitness
+package com.example.risezonefitness.model
 
 import android.graphics.Bitmap
+import com.example.risezonefitness.GmailSender
+import com.example.risezonefitness.listMembers
+import com.example.risezonefitness.unpaidMembersList
+import com.google.firebase.firestore.Exclude
+import com.google.firebase.firestore.IgnoreExtraProperties
 
+@IgnoreExtraProperties
 data class Member(
-    val fullName: String,
-    val age: Int,
-    val gender: String,
-    val phoneNumber: String,
-    val email: String,
-    val cin: String,
-    val username: String,
-    val password: String,
-    val imageResource: Bitmap? = null,
+    var fullName: String = "",
+    var age: Int = 0,
+    var gender: String = "",
+    var phoneNumber: String = "",
+    var email: String = "",
+    var cin: String = "",
+    var username: String = "",
+    var password: String = "",
+    @get:Exclude var imageResource: Bitmap? = null,
     var isPaid: Boolean = true,
     var isInGym: Boolean = false,
-    val registrationDate: Long = System.currentTimeMillis(),
+    var registrationDate: Long = System.currentTimeMillis(),
     var attendanceThisWeek: Int = 0,
     var lastAttendanceReset: Long = System.currentTimeMillis()
-) {
+)  {
+
+    constructor() : this(
+        "", 0, "", "", "", "", "", "", null, true, false,
+        System.currentTimeMillis(), 0, System.currentTimeMillis()
+    )
 
     fun checkPaymentStatus(): Member {
         val oneMonthMillis = 30L * 24 * 60 * 60 * 1000

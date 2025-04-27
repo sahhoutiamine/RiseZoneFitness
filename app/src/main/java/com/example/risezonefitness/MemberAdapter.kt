@@ -11,8 +11,12 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.risezonefitness.model.Member
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MemberAdapter(private val members: List<Member>, private val context: Context) : RecyclerView.Adapter<MemberAdapter.MemberViewHolder>() {
+
+    private val db = FirebaseFirestore.getInstance()
 
     class MemberViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nameText: TextView = itemView.findViewById(R.id.tvMemberName)
@@ -51,10 +55,21 @@ class MemberAdapter(private val members: List<Member>, private val context: Cont
         }
 
         holder.itemView.setOnClickListener {
-            val intent = Intent(context, ProfileActivity::class.java)
-            intent.putExtra("member_index", position)
-            context.startActivity(intent)
+            db.collection("Members").document(member.username).get()
+                .addOnSuccessListener { document ->
+                    if (document != null && document.exists()) {
+                        val username = document.getString("username")
+                        val intent = Intent(context, ProfileActivity::class.java)
+                        intent.putExtra("member_username", username)
+                        intent.putExtra("document_id", member.username)
+                        context.startActivity(intent)
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    println("Error getting document: $exception")
+                }
         }
+
     }
 
     override fun getItemCount(): Int = members.size

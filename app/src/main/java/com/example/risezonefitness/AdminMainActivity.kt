@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.work.PeriodicWorkRequestBuilder
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.work.WorkManager
+import com.example.risezonefitness.model.Member
 import java.util.concurrent.TimeUnit
 
 class AdminMainActivity : AppCompatActivity() {
@@ -49,7 +50,7 @@ class AdminMainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_members -> {
-                    openFragment(MembersFragment(allMembers))
+                    openFragment(MembersFragment())
                     true
                 }
                 R.id.nav_add -> {
@@ -71,7 +72,7 @@ class AdminMainActivity : AppCompatActivity() {
         val fragmentToLoad = intent.getStringExtra("fragmentToLoad")
         if (fragmentToLoad == "members") {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, MembersFragment(listMembers))
+                .replace(R.id.fragmentContainer, MembersFragment())
                 .commit()
             intent.removeExtra("fragmentToLoad")
         }

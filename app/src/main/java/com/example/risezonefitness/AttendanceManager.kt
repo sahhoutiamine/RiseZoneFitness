@@ -2,6 +2,7 @@ package com.example.risezonefitness
 
 
 
+import com.example.risezonefitness.model.Member
 import java.util.Calendar
 import kotlin.apply
 import kotlin.collections.set
