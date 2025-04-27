@@ -20,11 +20,33 @@ class LoginActivity : AppCompatActivity() {
     private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val sharedPref = getSharedPreferences("user_settings", MODE_PRIVATE)
-        val themeMode = sharedPref.getInt("theme_mode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-        AppCompatDelegate.setDefaultNightMode(themeMode)
-
         super.onCreate(savedInstanceState)
+
+        val sharedPref = getSharedPreferences("user_settings", MODE_PRIVATE)
+
+        if (sharedPref.contains("theme_mode")) {
+            val themeMode = sharedPref.getInt("theme_mode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            AppCompatDelegate.setDefaultNightMode(themeMode)
+        }
+
+        val isLoggedIn = sharedPref.getBoolean("is_logged_in", false)
+        val userType = sharedPref.getString("user_type", null)
+
+        if (isLoggedIn && userType != null) {
+            when (userType) {
+                "admin" -> {
+                    startActivity(Intent(this, AdminMainActivity::class.java))
+                    finish()
+                    return
+                }
+                "member" -> {
+                    startActivity(Intent(this, UserMainActivity::class.java))
+                    finish()
+                    return
+                }
+            }
+        }
+
         setContentView(R.layout.activity_login)
 
         val pwTextLayout = findViewById<TextInputLayout>(R.id.pwLoginText)
@@ -67,8 +89,7 @@ class LoginActivity : AppCompatActivity() {
         lifecycleScope.launchWhenStarted {
             viewModel.loginState.collect { state ->
                 when (state) {
-                    is LoginViewModel.LoginState.Loading -> {
-                    }
+                    is LoginViewModel.LoginState.Loading -> {}
                     is LoginViewModel.LoginState.AdminSuccess -> {
                         startActivity(Intent(this@LoginActivity, AdminMainActivity::class.java))
                         finish()

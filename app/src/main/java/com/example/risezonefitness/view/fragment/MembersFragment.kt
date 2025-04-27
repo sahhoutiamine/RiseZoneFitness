@@ -68,11 +68,24 @@ class MembersFragment : Fragment(R.layout.fragment_members) {
                 val isLeft = tab.position > lastTab
                 filterAndShow(selected, isLeft)
                 lastTab = tab.position
+
+                if (!isBottomNavVisible) {
+                    bottomNav.animate().translationY(0f).setDuration(150).start()
+                    isBottomNavVisible = true
+                }
             }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                if (!isBottomNavVisible) {
+                    bottomNav.animate().translationY(0f).setDuration(150).start()
+                    isBottomNavVisible = true
+                }
+            }
         })
+
     }
 
     private fun filterAndShow(selected: String, isLeft: Boolean = true) {

@@ -136,8 +136,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
 
         tvYes.setOnClickListener {
-            val sharedPref = requireContext().getSharedPreferences("user_session", Context.MODE_PRIVATE)
-            sharedPref.edit().clear().apply()
+            val sharedPref = requireContext().getSharedPreferences("user_settings", Context.MODE_PRIVATE)
+            sharedPref.edit()
+                .remove("is_logged_in")
+                .remove("username")
+                .remove("user_type")
+                .apply()
 
             val intent = Intent(requireContext(), WelcomeActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -150,5 +154,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.show()
     }
+
 
 }
