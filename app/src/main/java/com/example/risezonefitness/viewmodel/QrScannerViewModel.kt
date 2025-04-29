@@ -8,6 +8,10 @@ import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class QrScannerViewModel : ViewModel() {
 
@@ -74,6 +78,48 @@ class QrScannerViewModel : ViewModel() {
                 }
         }
     }
+
+    fun saveAttendanceLog(fullName: String, isEntry: Boolean) {
+        val db = FirebaseFirestore.getInstance()
+
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val currentDate = dateFormat.format(Date())
+
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+
+        val attendanceRef = db.collection("GymAttendanceLogs").document(currentDate)
+
+        val data = mapOf(
+            "year" to currentYear
+        )
+
+        val logMessage = "$fullName - ${getCurrentTimeOnly()}"
+
+        attendanceRef.set(data, com.google.firebase.firestore.SetOptions.merge())
+            .addOnSuccessListener {
+                val fieldToUpdate = if (isEntry) "entries" else "exits"
+
+                attendanceRef.update(fieldToUpdate, com.google.firebase.firestore.FieldValue.arrayUnion(logMessage))
+            }
+            .addOnFailureListener { exception ->
+                _errorState.value = exception.message
+            }
+
+        db.collection("GymAttendanceLogs")
+            .whereLessThan("year", currentYear)
+            .get()
+            .addOnSuccessListener { oldDocs ->
+                for (doc in oldDocs) {
+                    doc.reference.delete()
+                }
+            }
+    }
+
+    private fun getCurrentTimeOnly(): String {
+        val timeFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+        return timeFormat.format(Date())
+    }
+
 
     override fun onCleared() {
         super.onCleared()

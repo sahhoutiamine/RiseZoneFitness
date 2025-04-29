@@ -61,4 +61,12 @@
     <string name="week_streak">Week Streak</string>
     <string name="last_session">Last Session</string>
     <string name="login_sent">Let\'s Go</string>
+    <string name="entries_0">Entries: 0</string>
+    <string name="exits_0">Exits: 0</string>
+    <string name="date">Date</string>
+    <string name="members_in_gym_0">Members in Gym: 0</string>
+    <string name="non_subscribed_0">Non-Subscribed: 0</string>
+    <string name="total_members_0">Total Members: 0</string>
+    <string name="entries">Entries</string>
+    <string name="exits">Exits</string>
 </resources>

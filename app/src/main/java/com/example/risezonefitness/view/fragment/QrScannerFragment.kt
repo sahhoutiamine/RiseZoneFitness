@@ -115,7 +115,9 @@ class QrScannerFragment : Fragment() {
                                 onSuccess = { playFeedback() },
                                 onFailure = { showToast(it) }
                             )
+                            viewModel.saveAttendanceLog(it.fullName, true)
                             showResultDialog(qrContent, it.fullName)
+                            playFeedback()
                         } else {
                             showToast("You are already in the gym.")
                         }
@@ -126,6 +128,7 @@ class QrScannerFragment : Fragment() {
                             viewModel.updateMemberInGymStatus(it.username, false)
                             playFeedback()
                             showResultDialog(qrContent, it.fullName)
+                            viewModel.saveAttendanceLog(it.fullName, false)
                         } else {
                             showToast("You are not in the gym.")
                         }
@@ -145,7 +148,7 @@ class QrScannerFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun playFeedback() {
-        vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
+        vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
     }
 
     private fun showToast(message: String) {
