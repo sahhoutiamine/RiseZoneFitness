@@ -1,6 +1,5 @@
 package com.example.risezonefitness.data
 
-import com.example.risezonefitness.model.Admin
 import com.example.risezonefitness.model.Member
 
 
@@ -194,14 +193,6 @@ val listMembers = mutableListOf(
 
 
 
-
-    val listAdmins = mutableListOf(
-        Admin("Admin", "admin", "admin")
-    )
-
-    val entryLogList = mutableListOf<String>()
-
-    val memberAttendanceDays = mutableMapOf<String, MutableSet<String>>()
 
 
 

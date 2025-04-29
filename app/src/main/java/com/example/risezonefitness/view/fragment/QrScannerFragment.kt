@@ -6,12 +6,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.VibrationEffect
-import android.os.Vibrator
+import android.os.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,27 +18,28 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.risezonefitness.R
-import com.example.risezonefitness.view.activity.UserMainActivity
-import com.example.risezonefitness.data.entryLogList
-import com.example.risezonefitness.data.listMembers
+import com.example.risezonefitness.viewmodel.QrScannerViewModel
 import com.example.risezonefitness.model.AttendanceManager
+import com.example.risezonefitness.view.activity.UserMainActivity
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 class QrScannerFragment : Fragment() {
 
     private lateinit var barcodeView: DecoratedBarcodeView
-    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var vibrator: Vibrator
+    private lateinit var sharedPreferences: SharedPreferences
     private var scanned = false
     private var username: String? = null
 
+    private val viewModel: QrScannerViewModel by viewModels()
     private lateinit var cameraPermissionLauncher: ActivityResultLauncher<String>
 
     override fun onCreateView(
@@ -72,6 +68,13 @@ class QrScannerFragment : Fragment() {
         }
 
         checkCameraPermissionAndStart()
+
+        username = arguments?.getString("username")
+        username?.let {
+            viewModel.listenToMember(it)
+        }
+
+        observeViewModel()
     }
 
     private fun checkCameraPermissionAndStart() {
@@ -83,6 +86,17 @@ class QrScannerFragment : Fragment() {
         }
     }
 
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.errorState.collect { error ->
+                error?.let {
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
     private val callback = object : BarcodeCallback {
         @RequiresApi(Build.VERSION_CODES.O)
         override fun barcodeResult(result: BarcodeResult) {
@@ -90,41 +104,36 @@ class QrScannerFragment : Fragment() {
             scanned = true
 
             val qrContent = result.text.trim()
-            username = arguments?.getString("username")
-            val member = listMembers.find { it.username == username }
 
+            val member = viewModel.memberState.value
             member?.let {
-                val actionText = when (qrContent) {
+                when (qrContent) {
                     "RiseZoneGymEntry" -> {
                         if (!it.isInGym) {
-                            it.isInGym = true
-                            AttendanceManager.updateAttendanceIfNeeded(it)
-                            playFeedback()
-                            val log = "${it.fullName} Entry GYM  - ${getCurrentTime()}"
-                            entryLogList.add(log)
-                            log
+                            viewModel.updateMemberInGymStatus(it.username, true)
+                            AttendanceManager.updateAttendanceIfNeeded(it,
+                                onSuccess = { playFeedback() },
+                                onFailure = { showToast(it) }
+                            )
+                            showResultDialog(qrContent, it.fullName)
                         } else {
-                            Toast.makeText(context, "You are already in the gym.", Toast.LENGTH_SHORT).show()
+                            showToast("You are already in the gym.")
                         }
                     }
 
                     "RiseZoneGymExit" -> {
                         if (it.isInGym) {
-                            it.isInGym = false
+                            viewModel.updateMemberInGymStatus(it.username, false)
                             playFeedback()
-                            val log = "${it.fullName} Exit GYM - ${getCurrentTime()}"
-                            entryLogList.add(log)
-                            log
+                            showResultDialog(qrContent, it.fullName)
                         } else {
-                            Toast.makeText(context, "You are not in the gym.", Toast.LENGTH_SHORT).show()
+                            showToast("You are not in the gym.")
                         }
                     }
 
-                    else -> Toast.makeText(context, "Invalid QR code", Toast.LENGTH_SHORT).show()
-                }
-
-                if (true) {
-                    showResultDialog(qrContent, it.fullName)
+                    else -> {
+                        showToast("Invalid QR code")
+                    }
                 }
             }
 
@@ -139,37 +148,33 @@ class QrScannerFragment : Fragment() {
         vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
     }
 
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
     private fun getCurrentTime(): String {
         val format = SimpleDateFormat("HH:mm:ss - dd/MM/yyyy", Locale.getDefault())
         return format.format(Date())
     }
 
     private fun showResultDialog(status: String, name: String) {
-        val username = arguments?.getString("username")
-        val member = listMembers.find { it.username == username }
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_qr_result, null)
         val dialog = AlertDialog.Builder(requireContext()).setView(dialogView).create()
 
         val textResult = dialogView.findViewById<TextView>(R.id.textResult)
         val btnClose = dialogView.findViewById<TextView>(R.id.txtClose)
 
-        textResult.text = when {
-            status == "RiseZoneGymEntry" && member?.isInGym == true -> {
-                "Today's session is the opportunity to be stronger than yesterday! Ready for the challenge Mr $name?"
-            }
-            status == "RiseZoneGymExit" && member?.isInGym == false -> {
-                "Step by step, we’re getting closer to your goals. Don’t forget to come back for your next session Mr $name!"
-            }
-            else -> {
-                "Invalid QR code"
-            }
+        val message = when (status) {
+            "RiseZoneGymEntry" -> "Today's session is the opportunity to be stronger than yesterday! Ready for the challenge Mr $name?"
+            "RiseZoneGymExit" -> "Step by step, we’re getting closer to your goals. Don’t forget to come back for your next session Mr $name!"
+            else -> "Invalid QR code"
         }
 
+        textResult.text = message
 
         btnClose.setOnClickListener {
             dialog.dismiss()
         }
-
 
         dialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         dialog.show()

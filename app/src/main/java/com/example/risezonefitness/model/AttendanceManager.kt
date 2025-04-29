@@ -1,15 +1,20 @@
 package com.example.risezonefitness.model
 
-import com.example.risezonefitness.data.memberAttendanceDays
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
 
 object AttendanceManager {
 
 
-    fun updateAttendanceIfNeeded(member: Member) {
+    fun updateAttendanceIfNeeded(member: Member, onSuccess: () -> Unit = {}, onFailure: (String) -> Unit = {}) {
+
+        val db = FirebaseFirestore.getInstance()
         val now = Calendar.getInstance()
 
-        if (now.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) return
+        if (now.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            onSuccess()
+            return
+        }
 
         val lastReset = Calendar.getInstance().apply {
             timeInMillis = member.lastAttendanceReset
@@ -20,20 +25,69 @@ object AttendanceManager {
         val lastWeek = lastReset.get(Calendar.WEEK_OF_YEAR)
         val lastYear = lastReset.get(Calendar.YEAR)
 
+        var updatedAttendanceThisWeek = member.attendanceThisWeek
+        var updatedLastAttendanceReset = member.lastAttendanceReset
+
         if (nowWeek != lastWeek || nowYear != lastYear) {
-            member.attendanceThisWeek = 0
-            member.lastAttendanceReset = System.currentTimeMillis()
-            memberAttendanceDays[member.username] = mutableSetOf()
+            updatedAttendanceThisWeek = 0
+            updatedLastAttendanceReset = System.currentTimeMillis()
+
+            db.collection("Members")
+                .whereEqualTo("username", member.username)
+                .limit(1)
+                .get()
+                .addOnSuccessListener { documents ->
+                    if (!documents.isEmpty) {
+                        val documentId = documents.documents[0].id
+                        db.collection("Members").document(documentId)
+                            .update(
+                                mapOf(
+                                    "attendanceThisWeek" to 0,
+                                    "lastAttendanceReset" to updatedLastAttendanceReset
+                                )
+                            )
+                    }
+                }
         }
 
         val key = "${nowYear}-${nowWeek}-${now.get(Calendar.DAY_OF_WEEK)}"
-        if (!memberAttendanceDays.containsKey(member.username)) {
-            memberAttendanceDays[member.username] = mutableSetOf()
-        }
 
-        if (!memberAttendanceDays[member.username]!!.contains(key)) {
-            memberAttendanceDays[member.username]!!.add(key)
-            member.attendanceThisWeek++
-        }
+        db.collection("AttendanceDays")
+            .document(member.username)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                val attendedDays = documentSnapshot.get("days") as? List<String> ?: emptyList()
+
+                if (!attendedDays.contains(key)) {
+                    val updatedDays = attendedDays.toMutableList()
+                    updatedDays.add(key)
+
+                    db.collection("AttendanceDays").document(member.username)
+                        .set(mapOf("days" to updatedDays))
+                        .addOnSuccessListener {
+                            db.collection("Members")
+                                .whereEqualTo("username", member.username)
+                                .limit(1)
+                                .get()
+                                .addOnSuccessListener { documents ->
+                                    if (!documents.isEmpty) {
+                                        val documentId = documents.documents[0].id
+                                        db.collection("Members").document(documentId)
+                                            .update("attendanceThisWeek", updatedAttendanceThisWeek + 1)
+                                            .addOnSuccessListener { onSuccess() }
+                                            .addOnFailureListener { e -> onFailure(e.message ?: "Unknown error") }
+                                    }
+                                }
+                        }
+                        .addOnFailureListener { e ->
+                            onFailure(e.message ?: "Unknown error")
+                        }
+                } else {
+                    onSuccess()
+                }
+            }
+            .addOnFailureListener { e ->
+                onFailure(e.message ?: "Unknown error")
+            }
     }
 }
