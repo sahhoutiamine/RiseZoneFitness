@@ -1,5 +1,7 @@
 package com.example.risezonefitness.view.activity
 
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -16,6 +18,7 @@ import com.example.risezonefitness.R
 import com.example.risezonefitness.view.fragment.SettingsFragment
 import com.example.risezonefitness.view.fragment.AddFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 class AdminMainActivity : AppCompatActivity() {
@@ -33,8 +36,11 @@ class AdminMainActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.topAppBar)
         setSupportActionBar(toolbar)
 
+
         val sharedPref = getSharedPreferences("user_settings", MODE_PRIVATE)
         val lastFragment = sharedPref.getString("last_fragment", null)
+        loadLocale()
+
 
         if (lastFragment == "settings") {
             openFragment(SettingsFragment())
@@ -102,6 +108,20 @@ class AdminMainActivity : AppCompatActivity() {
 
         WorkManager.Companion.getInstance(this).enqueue(workRequest)
     }
+
+    private fun loadLocale() {
+        val prefs = getSharedPreferences("user_settings", Context.MODE_PRIVATE)
+        val language = prefs.getString("app_lang", "en") ?: "en"
+
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+
+        val config = Configuration()
+        config.setLocale(locale)
+
+        resources.updateConfiguration(config, resources.displayMetrics)
+    }
+
 
     private fun openFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()

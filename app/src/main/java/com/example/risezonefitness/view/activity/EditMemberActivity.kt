@@ -62,8 +62,6 @@ class EditMemberActivity : AppCompatActivity() {
                     cin = binding.signUpCIN.text.toString(),
                     username = binding.usernameInput.text.toString(),
                     password = binding.passwordInput.text.toString(),
-                    isPaid = true,
-                    isInGym = false,
                     imageResource = selectedImageBitmap
                 )
                 showConfirmDialog(updatedMember, documentId)

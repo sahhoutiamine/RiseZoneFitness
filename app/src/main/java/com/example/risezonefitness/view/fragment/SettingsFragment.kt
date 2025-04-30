@@ -3,6 +3,7 @@ package com.example.risezonefitness.view.fragment
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -19,6 +20,7 @@ import androidx.fragment.app.Fragment
 import com.example.risezonefitness.R
 import com.example.risezonefitness.view.activity.WelcomeActivity
 import com.example.risezonefitness.view.activity.AdminMainActivity
+import java.util.Locale
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
     override fun onCreateView(
@@ -116,11 +118,36 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun showLanguageDialog() {
         val languages = arrayOf("العربية", "Français", "English")
+        val languageCodes = arrayOf("ar", "fr", "en")
+
         showCustomListDialog("Choose Language", languages) { index ->
+            val selectedLang = languageCodes[index]
+            setLocale(selectedLang)
+
+            val sharedPref = requireContext().getSharedPreferences("user_settings", Context.MODE_PRIVATE)
+            sharedPref.edit {
+                putString("app_lang", selectedLang)
+                putString("last_fragment", "settings")
+            }
+
             Toast.makeText(requireContext(), "Selected: ${languages[index]}", Toast.LENGTH_SHORT).show()
 
+            requireActivity().recreate()
         }
     }
+
+
+    private fun setLocale(languageCode: String) {
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+
+        val config = Configuration()
+        config.setLocale(locale)
+
+        requireContext().resources.updateConfiguration(config, requireContext().resources.displayMetrics)
+    }
+
+
 
     private fun logout() {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_logout_confirmation, null)
