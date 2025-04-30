@@ -14,8 +14,6 @@ import com.example.risezonefitness.view.fragment.MembersFragment
 import com.example.risezonefitness.utils.PaymentCheckWorker
 import com.example.risezonefitness.R
 import com.example.risezonefitness.view.fragment.SettingsFragment
-import com.example.risezonefitness.data.listMembers
-import com.example.risezonefitness.model.Member
 import com.example.risezonefitness.view.fragment.AddFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.concurrent.TimeUnit
@@ -23,7 +21,6 @@ import java.util.concurrent.TimeUnit
 class AdminMainActivity : AppCompatActivity() {
 
     private lateinit var bottomNav: BottomNavigationView
-    lateinit var allMembers: List<Member>
     private var backPressedOnce = false
 
 
@@ -32,7 +29,6 @@ class AdminMainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_admin_main)
 
         bottomNav = findViewById(R.id.bottomNav)
-        allMembers = listMembers
 
         val toolbar = findViewById<Toolbar>(R.id.topAppBar)
         setSupportActionBar(toolbar)

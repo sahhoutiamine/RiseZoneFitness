@@ -69,4 +69,5 @@
     <string name="total_members_0">Total Members: 0</string>
     <string name="entries">Entries</string>
     <string name="exits">Exits</string>
+    <string name="empty">Empty</string>
 </resources>
