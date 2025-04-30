@@ -95,7 +95,12 @@ class MembersFragment : Fragment(R.layout.fragment_members) {
             "Not Subscriber" -> fullList.filter { !it.isPaid }
             else -> fullList
         }
-        animateRecyclerSwap(filteredList, isLeft)
+        val sortedList = filteredList.sortedWith(
+            compareByDescending<Member> { it.isInGym }
+                .thenBy { it.fullName }
+        )
+
+        animateRecyclerSwap(sortedList, isLeft)
     }
 
     private fun setupScrolling() {

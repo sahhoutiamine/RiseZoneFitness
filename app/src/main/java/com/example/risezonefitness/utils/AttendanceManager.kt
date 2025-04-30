@@ -1,5 +1,6 @@
-package com.example.risezonefitness.model
+package com.example.risezonefitness.utils
 
+import com.example.risezonefitness.model.Member
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
 

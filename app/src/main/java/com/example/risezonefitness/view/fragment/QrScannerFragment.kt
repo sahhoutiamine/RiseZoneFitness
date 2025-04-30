@@ -22,7 +22,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.risezonefitness.R
 import com.example.risezonefitness.viewmodel.QrScannerViewModel
-import com.example.risezonefitness.model.AttendanceManager
+import com.example.risezonefitness.utils.AttendanceManager
 import com.example.risezonefitness.view.activity.UserMainActivity
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
