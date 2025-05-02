@@ -27,6 +27,10 @@ class UserMainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user_main)
 
         bottomNav = findViewById(R.id.bottomNav)
+        bottomNav.itemRippleColor = null
+        bottomNav.itemIconTintList = null
+        bottomNav.isItemActiveIndicatorEnabled = false
+
         val toolbar = findViewById<Toolbar>(R.id.topAppBar)
         setSupportActionBar(toolbar)
 

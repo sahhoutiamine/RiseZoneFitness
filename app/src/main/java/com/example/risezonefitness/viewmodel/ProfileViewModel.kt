@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.risezonefitness.model.Member
+import com.example.risezonefitness.utils.Resource
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -100,8 +101,4 @@ class ProfileViewModel : ViewModel() {
 
     }
 }
-sealed class Resource<T> {
-    data class Success<T>(val data: T) : Resource<T>()
-    data class Error<T>(val message: String) : Resource<T>()
-    class Loading<T> : Resource<T>()
-}
+

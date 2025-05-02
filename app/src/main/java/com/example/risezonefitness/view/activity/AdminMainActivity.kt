@@ -32,6 +32,9 @@ class AdminMainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_admin_main)
 
         bottomNav = findViewById(R.id.bottomNav)
+        bottomNav.itemRippleColor = null
+        bottomNav.itemIconTintList = null
+        bottomNav.isItemActiveIndicatorEnabled = false
 
         val toolbar = findViewById<Toolbar>(R.id.topAppBar)
         setSupportActionBar(toolbar)
