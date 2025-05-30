@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="60dp"
-    tools:context=".view.fragment.MembersFragment">
+    tools:context=".view.fragment.MembersFragment"
+    style="@style/bgTheme">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/membersAppBar"
@@ -63,6 +64,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/members_list"
-        android:padding="5dp"/>
+        android:contentDescription="@string/members_list"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,9 +6,10 @@
     <LinearLayout
         android:layout_marginTop="80dp"
         android:orientation="vertical"
-        android:padding="16dp"
+        android:padding="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        style="@style/bgTheme">
 
         <TextView
             android:text="@string/general"
@@ -21,10 +22,8 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/card_theme"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:elevation="4dp"
-            app:cardCornerRadius="10dp">
+            android:layout_height="wrap_content">
+
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -52,9 +51,7 @@
             android:id="@+id/card_language"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:elevation="4dp"
-            app:cardCornerRadius="10dp">
+            android:layout_marginBottom="16dp">
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -89,9 +86,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/card_logout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="4dp"
-            app:cardCornerRadius="10dp">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:orientation="horizontal"

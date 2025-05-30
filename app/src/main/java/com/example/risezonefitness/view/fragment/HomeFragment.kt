@@ -21,6 +21,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var attendanceAdapter: GymAttendanceLogAdapter
+    private lateinit var welcomeTextView: TextView
+    private lateinit var totalMembersTextView: TextView
+    private lateinit var membersInGymTextView: TextView
+    private lateinit var nonSubscribedTextView: TextView
+    private lateinit var sharedPref: android.content.SharedPreferences
+    private var username: String? = null
+
 
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -28,13 +35,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         (activity as? AdminMainActivity)?.updateToolbarTitle("Home")
 
-        val sharedPref = requireContext().getSharedPreferences("user_settings", Context.MODE_PRIVATE)
-        val username = sharedPref.getString("username", "User")
+        sharedPref = requireContext().getSharedPreferences("user_settings", Context.MODE_PRIVATE)
+        username = sharedPref.getString("username", "User")
 
-        val welcomeTextView = view.findViewById<TextView>(R.id.welcomeTextView)
-        val totalMembersTextView = view.findViewById<TextView>(R.id.totalMembersTextView)
-        val membersInGymTextView = view.findViewById<TextView>(R.id.membersInGymTextView)
-        val nonSubscribedTextView = view.findViewById<TextView>(R.id.nonSubscribedTextView)
+        welcomeTextView = view.findViewById<TextView>(R.id.welcomeTextView)
+        totalMembersTextView = view.findViewById<TextView>(R.id.totalMembersTextView)
+        membersInGymTextView = view.findViewById<TextView>(R.id.membersInGymTextView)
+        nonSubscribedTextView = view.findViewById<TextView>(R.id.nonSubscribedTextView)
         val attendanceRecyclerView = view.findViewById<RecyclerView>(R.id.attendanceLogsRecyclerView)
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
 
@@ -71,6 +78,24 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun reloadData() {
+
+        username?.let {
+            homeViewModel.getFullName(it).observe(viewLifecycleOwner) { fullName ->
+                welcomeTextView.text = "Welcome, $fullName"
+            }
+        }
+
+        homeViewModel.totalMembers.observe(viewLifecycleOwner) { count ->
+            totalMembersTextView.text = "Total Members: $count"
+        }
+
+        homeViewModel.membersInGym.observe(viewLifecycleOwner) { count ->
+            membersInGymTextView.text = "Members in Gym: $count"
+        }
+
+        homeViewModel.nonSubscribedMembers.observe(viewLifecycleOwner) { count ->
+            nonSubscribedTextView.text = "Non-Subscribed: $count"
+        }
         homeViewModel.gymAttendanceLogs.observe(viewLifecycleOwner) { logs ->
             attendanceAdapter.updateLogs(logs)
             swipeRefreshLayout.isRefreshing = false

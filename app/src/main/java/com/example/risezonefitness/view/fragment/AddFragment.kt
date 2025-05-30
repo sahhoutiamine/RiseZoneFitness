@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.airbnb.lottie.LottieAnimationView
 import com.example.risezonefitness.viewmodel.AddMemberViewModel
 import com.example.risezonefitness.view.activity.AdminMainActivity
 import com.example.risezonefitness.R
@@ -34,6 +35,7 @@ class AddFragment : Fragment() {
     private lateinit var passwordInput: TextInputEditText
     private lateinit var saveButton: Button
     private lateinit var profileImage: ImageView
+    private lateinit var loadingAnimation: LottieAnimationView
     private var selectedImageUri: Uri? = null
 
     private val addMemberViewModel: AddMemberViewModel by viewModels()
@@ -63,18 +65,24 @@ class AddFragment : Fragment() {
         passwordInput = view.findViewById(R.id.passwordInput)
         saveButton = view.findViewById(R.id.saveButton)
         profileImage = view.findViewById(R.id.profileImage)
+        loadingAnimation = view.findViewById(R.id.loadingAnimation)
+
 
         profileImage.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             imagePickerLauncher.launch(intent)
         }
 
-        saveButton.setOnClickListener { saveMember() }
+        saveButton.setOnClickListener {
+            saveMember()
+        }
 
         return view
     }
 
     private fun saveMember() {
+
+
         val fullName = fullNameInput.text.toString().trim()
         val age = ageInput.text.toString().trim()
         val gender = genderInput.text.toString().trim()
@@ -84,9 +92,14 @@ class AddFragment : Fragment() {
         val username = usernameInput.text.toString().trim()
         val password = passwordInput.text.toString().trim()
 
-        if (fullName.isEmpty() || age.isEmpty() || gender.isEmpty() || phone.isEmpty() ||
-            email.isEmpty() || cin.isEmpty() || username.isEmpty() || password.isEmpty()
+
+        if (!fullName.isEmpty() || !age.isEmpty() || !gender.isEmpty() || !phone.isEmpty() ||
+            !email.isEmpty() || !cin.isEmpty() || !username.isEmpty() || !password.isEmpty()
         ) {
+            loadingAnimation.visibility = View.VISIBLE
+            saveButton.isEnabled = false
+            saveButton.visibility = View.INVISIBLE
+        }else{
             Toast.makeText(requireContext(), "Please Fill the Fields Before !!", Toast.LENGTH_SHORT).show()
             return
         }
@@ -108,10 +121,16 @@ class AddFragment : Fragment() {
 
         addMemberViewModel.addNewMember(newMember,
             onSuccess = {
+                loadingAnimation.visibility = View.GONE
+                saveButton.isEnabled = true
+                saveButton.visibility = View.VISIBLE
                 showSuccessDialog()
                 clearFields()
             },
             onFailure = { error ->
+                loadingAnimation.visibility = View.GONE
+                saveButton.isEnabled = true
+                saveButton.visibility = View.VISIBLE
                 Toast.makeText(requireContext(), "Failed to add member: $error", Toast.LENGTH_SHORT).show()
             }
         )

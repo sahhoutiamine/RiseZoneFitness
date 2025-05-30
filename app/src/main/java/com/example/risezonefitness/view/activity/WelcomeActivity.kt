@@ -20,7 +20,7 @@ class WelcomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_welcone)
+        setContentView(R.layout.activity_welcome)
 
         welcomeAnimation = findViewById(R.id.welcomeAnimation)
         loadingAnimation = findViewById(R.id.loadingAnimation)

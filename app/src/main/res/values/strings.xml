@@ -70,4 +70,6 @@
     <string name="entries">Entries</string>
     <string name="exits">Exits</string>
     <string name="empty">Empty</string>
+    <string name="reports">reports\n</string>
+    <string name="recent_activity">Recent Activity</string>
 </resources>

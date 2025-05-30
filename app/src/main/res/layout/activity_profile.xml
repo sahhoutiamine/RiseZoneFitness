@@ -5,7 +5,8 @@
     android:id="@+id/profileConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.activity.ProfileActivity">
+    tools:context=".view.activity.ProfileActivity"
+    style="@style/bgTheme">
 
     <ScrollView
         android:id="@+id/scrollView"

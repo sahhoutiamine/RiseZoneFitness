@@ -14,7 +14,8 @@
         android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
         app:title="RiseZone"
         app:titleCentered="true"
-        app:titleTextAppearance="@style/ToolbarTitleStyle"/>
+        app:titleTextAppearance="@style/ToolbarTitleStyle"
+        style="@style/bgTheme"/>
 
 
 
